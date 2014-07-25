@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="JSFProcess">
+ <PROCESS-ITEM NAME="rules:" SHAPE="32,17,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules::0" NAME="item" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="inicio::#index.xhtml" NAME="output"
+    PATH="/index.xhtml" TARGET="rules:#index.xhtml" TITLE="inicio" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="usuario::#paginas#usuario.xhtml"
+    NAME="output1" PATH="/paginas/usuario.xhtml"
+    TARGET="rules:#paginas#usuario.xhtml" TITLE="usuario" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="termos::#paginas#termos.xhtml"
+    NAME="output2" PATH="/paginas/termos.xhtml"
+    TARGET="rules:#paginas#termos.xhtml" TITLE="termos" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="spot::#paginas#spot.xhtml" NAME="output3"
+    PATH="/paginas/spot.xhtml" TARGET="rules:#paginas#spot.xhtml"
+    TITLE="spot" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="seguranca::#paginas#seguranca.xhtml"
+    NAME="output4" PATH="/paginas/seguranca.xhtml"
+    TARGET="rules:#paginas#seguranca.xhtml" TITLE="seguranca" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="relatorios::#paginas#relatorios.xhtml"
+    NAME="output5" PATH="/paginas/relatorios.xhtml"
+    TARGET="rules:#paginas#relatorios.xhtml" TITLE="relatorios" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="listaFidelizada::#paginas#listaFidelizada.xhtml" NAME="output6"
+    PATH="/paginas/listaFidelizada.xhtml"
+    TARGET="rules:#paginas#listaFidelizada.xhtml"
+    TITLE="listaFidelizada" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="graficos::#paginas#graficos.xhtml"
+    NAME="output7" PATH="/paginas/graficos.xhtml"
+    TARGET="rules:#paginas#graficos.xhtml" TITLE="graficos" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="campanha::#paginas#campanha.xhtml"
+    NAME="output8" PATH="/paginas/campanha.xhtml"
+    TARGET="rules:#paginas#campanha.xhtml" TITLE="campanha" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="anunciante::#paginas#anunciante.xhtml"
+    NAME="output9" PATH="/paginas/anunciante.xhtml"
+    TARGET="rules:#paginas#anunciante.xhtml" TITLE="anunciante" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="agencia::#paginas#agencia.xhtml"
+    NAME="output10" PATH="/paginas/agencia.xhtml"
+    TARGET="rules:#paginas#agencia.xhtml" TITLE="agencia" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#paginas#relatorios.xhtml"
+  PATH="/paginas/relatorios.xhtml" SHAPE="304,913,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#paginas#usuario.xhtml"
+  PATH="/paginas/usuario.xhtml" SHAPE="304,465,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#paginas#anunciante.xhtml"
+  PATH="/paginas/anunciante.xhtml" SHAPE="304,1361,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#paginas#graficos.xhtml"
+  PATH="/paginas/graficos.xhtml" SHAPE="304,1137,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#index.xhtml" PATH="/index.xhtml"
+  SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#paginas#seguranca.xhtml"
+  PATH="/paginas/seguranca.xhtml" SHAPE="304,801,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#paginas#spot.xhtml"
+  PATH="/paginas/spot.xhtml" SHAPE="304,689,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#paginas#agencia.xhtml"
+  PATH="/paginas/agencia.xhtml" SHAPE="304,1473,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#paginas#listaFidelizada.xhtml"
+  PATH="/paginas/listaFidelizada.xhtml" SHAPE="304,1025,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#paginas#campanha.xhtml"
+  PATH="/paginas/campanha.xhtml" SHAPE="304,1249,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#paginas#termos.xhtml"
+  PATH="/paginas/termos.xhtml" SHAPE="304,577,0,0" model-entity="JSFProcessGroup"/>
+</PROCESS>

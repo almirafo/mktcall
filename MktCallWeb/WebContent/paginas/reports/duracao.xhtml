@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/paginas//template.xhtml">
+	<ui:define name="conteudo">
+		<h:form id="formRelatorio">
+			<f:event
+				type="preRenderComponent"
+				listener="#{relatorioMBean.permiteAcesso}" />
+			<div id="primary-menu">
+				<ul>
+					<li><h:commandLink
+							value="#{rotulo.campanhas}"
+							action="#{campanhaMBean.iniciarCampanha}"
+							id="menuCampanhas" /></li>
+					<li><h:commandLink
+							value="#{rotulo.spots}"
+							action="#{spotMBean.iniciarSpot}"
+							id="menuSpots" /></li>
+					<li><h:commandLink
+							value="#{rotulo.agencias}"
+							action="#{agenciaMBean.iniciarAgencia}"
+							id="menuAgencias"
+							rendered="#{loginMBean.isAdmin}" /></li>
+					<li><h:commandLink
+							value="#{rotulo.anunciantes}"
+							action="#{anuncianteMBean.iniciarAnunciante}"
+							id="menuAnunciantes"
+							rendered="#{loginMBean.isAdmin or loginMBean.isAgencia}" /></li>
+					<li><h:commandLink
+							value="#{rotulo.usuarios}"
+							action="#{usuarioMBean.iniciarUsuario}"
+							id="menuUsuarios"
+							rendered="#{loginMBean.isAdmin}" /></li>
+					<li><h:commandLink
+							value="#{rotulo.listaFidelizada}"
+							action="#{listaFidelizadaMBean.iniciarListaFidelizada}"
+							id="menuListaFidelizada" /></li>
+					<li class="active"><h:commandLink
+							value="#{rotulo.relatorios}"
+							action="#{relatorioMBean.iniciar}"
+							id="menuRelatorios" /></li>
+					<li class="last"><h:commandLink
+							value="#{rotulo.sair}"
+							action="#{loginMBean.encerraSessao}"
+							id="sair" /></li>
+				</ul>
+			</div>
+			<div id="secondary-menu">
+				<ul>
+
+					<li><p:commandLink
+							value="#{rotulo.efetividadeCampanha}"
+							style="padding: 0 15px !important;"
+							action="#{relatorioMBean.relatorioEfetividade}"
+							id="RelatorioConsolidado" /></li>
+					<li><p:commandLink
+							value="#{rotulo.relatInteracao}"
+							style="padding: 0 15px !important;"
+							action="#{relatorioMBean.relatorioIntegracao}"
+							id="RelatorioIntegracao" /></li>	
+					<li><p:commandLink
+							value="#{rotulo.relatDuracao}"
+							style="padding: 0 15px !important;"
+							action="#{relatorioMBean.relatorioDuracao}"
+							id="RelatorioDuracao" /></li>									
+
+				</ul>
+			</div>
+			<br />
+			<div id="round-border">
+				<p:messages id="messages" />
+				<h3>
+					<h:outputText value="#{rotulo.relatorios}" />
+				</h3>
+				<div id="formulario">
+					<h:panelGrid columns="2">
+						<h:outputText value="#{rotulo.listarTodasCampanhas}" />
+						<p:pickList
+							value="#{relatorioMBean.campanhas}"
+							var="campanha"
+							itemLabel="#{campanha.name}"
+							iconOnly="true"
+							itemValue="#{campanha}"
+							converter="simpleEntityConverter"
+							addAllLabel="#{rotulo.incluirTodas}"
+							addLabel="#{rotulo.incluir}"
+							removeAllLabel="#{rotulo.excluirTodas}"
+							removeLabel="#{rotulo.excluir}"
+							showSourceFilter="true"
+							showTargetFilter="true"
+							immediate="true" />
+
+					</h:panelGrid>
+				</div>
+
+				<div align="center">
+
+					<h:outputText value="#{rotulo.dataInicio}:" />
+					<br />
+					<p:calendar
+						value="#{relatorioMBean.dataRelatorioInicio}"
+						pattern="dd/MM/yyyy"
+						id="dataRelatorioInicio" />
+
+					<br />
+					<h:outputText value="#{rotulo.dataFim}:" />
+					<br />
+					<p:calendar
+						value="#{relatorioMBean.dataRelatorioFim}"
+						pattern="dd/MM/yyyy"
+						id="dataRelatorioFim" />
+				</div>
+				
+				<br/>
+
+				<div align="center">
+					<p:commandButton
+						id="gerarRelatorioPDF"
+						ajax="false"
+						value="gerar relatorio PDF"
+						actionListener="#{relatorioMBean.gerarRelatorioDuracao}"
+						icon="ui-icon-script"
+						update="@form" >
+						<f:attribute
+							name="filetype"
+							value="PDF" />
+					</p:commandButton>
+					<p:spacer />
+
+					<p:commandButton
+						id="gerarRelatorioXLS"
+						value="gerar relatorio XLS"
+						actionListener="#{relatorioMBean.gerarRelatorioDuracao}"
+						ajax="false"
+						icon="ui-icon-clipboard"
+						update="@form">
+						<f:attribute
+							name="filetype"
+							value="XLS" />
+					</p:commandButton>
+					<p:spacer />
+
+					
+					<p:commandButton
+						id="gerarRelatorioDOC"
+						value="gerar relatorio DOC"
+						actionListener="#{relatorioMBean.gerarRelatorioDuracao}"
+						ajax="false" 
+						icon="ui-icon-newwin"
+						update="@form">
+						<f:attribute
+							name="filetype"
+							value="DOC" />
+					</p:commandButton>
+
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

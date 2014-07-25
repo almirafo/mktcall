@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Teste" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4a94ff6a-c5c9-4800-8cd6-318430aa0aa1">
+	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="248"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<subDataset name="dataset1" uuid="341c852e-6c46-4af1-b3f8-56ade9e4b326"/>
+	<subDataset name="dataset2" uuid="b9df1faa-f6db-4c96-8a9f-5d46d531700f"/>
+	<parameter name="IMAGEM_BRASAO" class="java.lang.String"/>
+	<field name="nomeCampanha" class="java.lang.String"/>
+	<field name="dataRelatorioInicio" class="java.lang.String"/>
+	<field name="dataRelatorioFim" class="java.lang.String"/>
+	<field name="totalExibicoes" class="java.lang.Number"/>
+	<field name="unicos" class="java.lang.Number"/>
+	<field name="ouviuCompleto" class="java.lang.Number"/>
+	<field name="ouviuIncompleto" class="java.lang.Number"/>
+	<field name="dataCampanha" class="java.lang.String"/>
+	<variable name="ouviuCompleto_SUM" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{ouviuCompleto}]]></variableExpression>
+	</variable>
+	<variable name="ouviuIncompleto_SUM" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{ouviuIncompleto}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="70" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="26429e50-0870-4bf2-9731-852163dd826e" style="Title" x="0" y="13" width="287" height="33" forecolor="#990099"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Chamada Patrocinada]]></text>
+			</staticText>
+			<image>
+				<reportElement uuid="9b8b6fac-30c0-4603-8344-07232030b184" isPrintRepeatedValues="false" x="365" y="0" width="190" height="70"/>
+				<imageExpression><![CDATA[$P{IMAGEM_BRASAO}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="50" splitType="Stretch">
+			<line>
+				<reportElement uuid="dae2b5c0-9b9e-4e48-b342-21e234e9bd39" positionType="FixRelativeToBottom" x="0" y="35" width="555" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement uuid="1524f5bd-f995-443c-9ab1-2a6f32456e4a" style="SubTitle" x="51" y="11" width="314" height="24" forecolor="#990099"/>
+				<textElement>
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Relatório de Efetividade "]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement uuid="5c18b292-c4e0-4b3d-a2a9-e6475ee2d391" mode="Opaque" x="0" y="11" width="36" height="24" forecolor="#CCCCCC" backcolor="#CCCCCC"/>
+			</rectangle>
+			<textField>
+				<reportElement uuid="868005a8-e3b4-4250-9844-7980e6a61ce5" x="403" y="19" width="59" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dataRelatorioInicio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="82cb2505-1cf0-4b77-8cd5-9331b6b36117" x="486" y="19" width="67" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dataRelatorioFim}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="b385a4e2-ab08-479b-8c8e-9bef7fc0849a" x="373" y="19" width="30" height="16"/>
+				<textElement/>
+				<text><![CDATA[De:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="997e1aed-9462-4bce-9793-d1ee7dde64e6" x="462" y="19" width="24" height="16"/>
+				<textElement/>
+				<text><![CDATA[Até:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="3fd2fbc7-db42-4761-b728-d1bbcfb3af51" style="Title" x="68" y="36" width="129" height="14"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Nome da Campanha"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d03d607c-58a4-43d0-9d33-0ad9a77f7fa9" style="Title" x="197" y="36" width="58" height="14"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Exibições"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="660fb396-eeeb-4523-bb95-cd1f09591dc8" style="Title" x="255" y="36" width="77" height="14"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Usuários Únicos"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d6365db2-8c83-45cd-a8d9-728b8f424c25" style="Title" x="332" y="36" width="71" height="14"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Ouviu Completo"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="0514a1fb-a177-4d43-804a-bb60f5f33b2b" style="Title" x="437" y="36" width="81" height="14"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Ouviu Incompleto"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="286a3131-6bc7-4b7e-a3f2-3c0387a210b7" style="Title" x="403" y="36" width="34" height="14"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["%"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="8159f4b0-d427-4a75-a9c4-9a05b50bef0e" style="Title" x="518" y="36" width="37" height="14"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["%"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="1feef5ca-d92e-49fd-9721-9a65a2d2d5ef" style="Title" x="0" y="36" width="68" height="14"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Data"]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<line>
+				<reportElement uuid="87f1dfde-a5fa-4cad-8ac9-490573844f05" positionType="FixRelativeToBottom" x="-2" y="0" width="555" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="ea782a6f-ae14-434c-aa02-1a144db245c5" x="68" y="1" width="129" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeCampanha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="3fdf6c34-47ab-4fb7-a85f-6b4c7328b26a" x="197" y="1" width="58" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totalExibicoes}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="3af628a8-dbd1-4abc-8560-2b5e7550650b" x="255" y="1" width="77" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{unicos}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="fc27daaa-a2fb-4ce0-8cf0-930aa9d73df0" x="332" y="1" width="71" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ouviuCompleto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="2968e513-d1c1-4a9e-9b8b-e3c99be87f70" x="437" y="1" width="81" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ouviuIncompleto}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Auto" pattern="#,##0.00%">
+				<reportElement uuid="0209d2c9-f86c-4413-91ff-b952036551c3" x="403" y="1" width="34" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new Double( $F{ouviuCompleto}.doubleValue() / $F{totalExibicoes}.doubleValue() )]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Auto" pattern="#,##0.00%">
+				<reportElement uuid="037176c8-6e7d-4026-95f9-e29cfe9fddbd" x="518" y="1" width="37" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new Double( $F{ouviuIncompleto}.doubleValue() / $F{totalExibicoes}.doubleValue() )]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="83bcd6f1-2e9a-42be-95f1-a35473c37b0e" x="0" y="1" width="68" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dataCampanha}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="50"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="8c6942d3-bc78-40b1-bea8-d0e74ba8dbc3" style="Column header" x="433" y="0" width="80" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="db17a571-d7d8-4fa0-b15b-ace891d762af" style="Column header" x="513" y="0" width="40" height="20"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement uuid="14f95b2d-1596-4480-a47b-0cb334cfefbb" style="Column header" x="0" y="0" width="197" height="20"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

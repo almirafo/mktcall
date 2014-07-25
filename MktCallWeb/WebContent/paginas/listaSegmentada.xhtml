@@ -1,0 +1,278 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/paginas/template.xhtml">
+	<ui:define name="conteudo">
+		<h:form id="formListaSegmentada">
+			<f:event
+				type="preRenderComponent"
+				listener="#{listaSegmentadaMBean.permiteAcesso}" />
+			<div id="primary-menu">
+				<ul>
+					<li><h:commandLink
+							value="#{rotulo.campanhas}"
+							action="#{campanhaMBean.iniciarCampanha}"
+							id="menuCampanhas" /></li>
+					<li><h:commandLink
+							value="#{rotulo.spots}"
+							action="#{spotMBean.iniciarSpot}"
+							id="menuSpots" /></li>
+					<li><h:commandLink
+							value="#{rotulo.agencias}"
+							action="#{agenciaMBean.iniciarAgencia}"
+							id="menuAgencias"
+							rendered="#{loginMBean.isAdmin}" /></li>
+					<li><h:commandLink
+							value="#{rotulo.anunciantes}"
+							action="#{anuncianteMBean.iniciarAnunciante}"
+							id="menuAnunciantes"
+							rendered="#{loginMBean.isAdmin or loginMBean.isAgencia}" /></li>
+					<li><h:commandLink
+							value="#{rotulo.usuarios}"
+							action="#{usuarioMBean.iniciarUsuario}"
+							id="menuUsuarios"
+							rendered="#{loginMBean.isAdmin}" /></li>
+					<li class="active"><h:commandLink
+							value="#{rotulo.listaSegmentada}"
+							action="#{listaSegmentadaMBean.iniciarListaSegmentada}"
+							id="menuListaFidelizada" /></li>
+					<li><h:commandLink
+							value="#{rotulo.relatorios}"
+							action="#{relatorioMBean.iniciar}"
+							id="menuRelatorios" /></li>
+					<li class="last"><h:commandLink
+							value="#{rotulo.sair}"
+							action="#{loginMBean.encerraSessao}"
+							id="sair" /></li>
+				</ul>
+			</div>
+
+			<div id="secondary-menu">
+				<ul>
+				<li></li>
+				</ul>
+			</div>
+			<br />
+
+			<div id="round-border">
+				<h3>
+					<h:outputText value="#{rotulo.listaSegmentada}" />
+				</h3>
+				<p:messages id="messages" />
+
+					<p:dataTable
+					var="listDetail"
+					value="#{listaSegmentadaMBean.listDetailAll}"
+					id="listDetail"
+					paginator="true"
+					rows="10"
+					selectionMode="single"
+					selection="#{listaSegmentadaMBean.listaSegmentadaSelecionada}"
+					
+					rowKey="#{listDetail.idList}"
+					
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10,15">
+					
+					 <p:ajax event="rowSelect" update=":formSalvarListaSegmentada" oncomplete="modalSalvarListaSegmentada.show()" /> 
+					
+					<p:column
+						headerText="#{rotulo.nomeDaLista}"
+						styleClass="text-align:center;"
+						sortBy="#{listDetail.listName}"
+						filterBy="#{listDetail.listName}"
+						filterMatchMode="contains">
+						<h:outputText value="#{listDetail.listName}" />
+					</p:column>
+					
+					<p:column
+						headerText="#{rotulo.nomeDoArquivo}"
+						styleClass="text-align:center;"
+						sortBy="#{listDetail.filename}"
+						filterBy="#{listDetail.filename}"
+						filterMatchMode="contains">
+						<h:outputText value="#{listDetail.filename}" />
+					</p:column>
+					
+					<p:column
+						headerText="#{rotulo.listaSegmentadaDataOperacao2}"
+						styleClass="text-align:center;"
+						sortBy="#{listDetail.datetimeOperation}"
+						filterBy="#{listDetail.datetimeOperation}"
+						filterMatchMode="contains">
+						<h:outputText value="#{listDetail.datetimeOperation}" >
+						    <f:converter converterId="DataConverter" /> 
+						</h:outputText>
+					</p:column>
+
+					<p:column
+						headerText="#{rotulo.listaSegmentadaSituacao2}"
+						styleClass="text-align:center;"
+						sortBy="#{listDetail.listStatus}"
+						filterBy="#{listDetail.listStatus}"
+						filterOptions="#{listaSegmentadaMBean.statusOptions}"
+						filterMatchMode="contains">
+						<h:outputText value="#{listDetail.listStatus}" >
+							<f:converter converterId="ListSegmentStatusConverter" />
+						</h:outputText>
+					</p:column>					
+					
+					<p:column
+						headerText="#{rotulo.listaSegmentadaStatus2}"
+						styleClass="text-align:center;"
+						sortBy="#{listDetail.listActive}"
+						filterBy="#{listDetail.listActive}"
+						filterOptions="#{listaSegmentadaMBean.ativoOptions}"
+						filterMatchMode="contains">
+						<h:outputText value="#{listDetail.listActive}" >
+							<f:converter converterId="StatusConverter" />
+						</h:outputText>
+					</p:column>						
+					
+					</p:dataTable>
+			</div>
+
+		</h:form>
+		
+		<h:form id="formFileUpload">
+		    <div id="round-border">
+				<h:panelGrid id="panel" columns="2" border="1" cellpadding="0" cellspacing="2">
+		        <f:facet name="header">
+		            <h:outputText value="#{rotulo.carregarLista}"/>
+		        </f:facet>
+		        <h:outputLabel for="NomeDaLista" value="#{rotulo.nomeDaLista}" />
+		        <h:inputText id="NomeDaLista" maxlength="32" size="25" value="#{listaSegmentadaMBean.segmentName}" />
+		        <h:outputLabel for="listaArquivos2" value="#{rotulo.arquivosDisponiveis}" />
+		        <p:selectOneMenu
+								size="2"
+								id="listaArquivos" 
+								required="true"
+								requiredMessage="#{rotulo.campoObrigatorio}"
+								value="#{listaSegmentadaMBean.fileName}">
+								<f:selectItem
+									itemLabel="#{rotulo.selecione}"
+									itemValue="0" />
+								<f:selectItems value="#{listaSegmentadaMBean.listaArquivos()}" />
+							</p:selectOneMenu>
+		        <f:facet name="footer">
+		            <h:panelGroup style="display:block; text-align:center">
+		                <p:commandButton
+								actionListener="#{listaSegmentadaMBean.processarArquivo}"
+								update=":formExclusao:acao  :formFileUpload:listaArquivos :formListaSegmentada:listDetail"
+								oncomplete="excluirComplete.show()"
+								value="#{rotulo.processarArquivo}" >
+								
+								</p:commandButton>
+		            </h:panelGroup>
+		        </f:facet>
+	        </h:panelGrid>	
+		    </div>
+		</h:form>
+		
+		
+		
+			<p:dialog
+			widgetVar="modalSalvarListaSegmentada"
+			modal="true"
+			width="450"
+			resizable="true"
+			height="250"
+			
+			onHide="labels();"
+			showEffect="explode" hideEffect="explode"
+			header="#{rotulo.listaSegmentada}">
+			<h:form
+				id="formSalvarListaSegmentada"
+				prependId="false">
+				<div id="formulario">
+			        <h:panelGrid id="display" columns="2" cellpadding="4">			
+			            
+			            <h:outputText value="#{rotulo.listaSegmentadaNome}" />
+			            <p:inputText value="#{listaSegmentadaMBean.listaSegmentadaSelecionada.listName}" size="32" required="true"/>  
+			
+			            <h:outputText value="#{rotulo.listaSegmentadaArquivo}" />
+			            <h:outputText value="#{listaSegmentadaMBean.listaSegmentadaSelecionada.filename}" id="filename"/>
+			
+			            <h:outputText value="#{rotulo.listaSegmentadaDataOperacao}" />
+			            <h:outputText value="#{listaSegmentadaMBean.listaSegmentadaSelecionada.datetimeOperation}" id="datetimeOperation">
+			                <f:converter converterId="DataConverter" />
+			            </h:outputText>
+			
+			            <h:outputText value="#{rotulo.listaSegmentadaSituacao}" />
+			            <h:outputText value="#{listaSegmentadaMBean.listaSegmentadaSelecionada.listStatus}" id="listStatus">
+			            <f:converter converterId="ListSegmentStatusConverter" />
+			            </h:outputText>
+			            
+			            <h:outputText value="#{rotulo.listaSegmentadaStatus}" />
+			            <h:selectOneListbox
+									id="situacao"
+									size="1"
+									value="#{listaSegmentadaMBean.listaSegmentadaSelecionada.listActive}"
+									required="true"
+									requiredMessage="Situação: #{rotulo.campoObrigatorio}">
+									<f:selectItem
+										itemValue="TRUE"
+										itemLabel="#{rotulo.ativa}" />
+									<f:selectItem
+										itemValue="FALSE"
+										itemLabel="#{rotulo.inativa}" />
+						</h:selectOneListbox>			            
+			            
+			        </h:panelGrid>
+			        <h:panelGrid id="botoes" columns="2" cellpadding="4">
+			        
+				        <p:commandButton value="#{rotulo.excluir}"  actionListener="#{listaSegmentadaMBean.excluirLista}"  update=":formListaSegmentada:listDetail :formExclusao:acao" oncomplete="modalSalvarListaSegmentada.hide();excluirComplete.show()"/>
+			            <p:commandButton value="#{rotulo.alterar}"  actionListener="#{listaSegmentadaMBean.alterarLista}"  update=":formListaSegmentada:listDetail :formalterarListaComplete:acao" oncomplete="modalSalvarListaSegmentada.hide(); alterarListaComplete.show()"/>
+			        </h:panelGrid>
+			        
+			     </div>
+        	</h:form>
+    	</p:dialog>
+		
+		
+		<p:dialog    widgetVar="fileUploadComplete" modal="true" >
+		<h:form id="formUploadComplete">
+			<h:panelGrid columns="1" border="0" >
+			    <p:outputLabel id="acao" value="#{listaSegmentadaMBean.acao}"/>
+			    <p:commandButton value="ok" onclick="fileUploadComplete.hide()"/>
+		    </h:panelGrid>
+		</h:form>    
+		</p:dialog>
+
+
+
+		
+		
+		<p:dialog    widgetVar="excluirComplete" modal="true" >
+		<h:form id="formExclusao">
+			<h:panelGrid columns="1" border="0" >
+			    <p:outputLabel id="acao" value="#{listaSegmentadaMBean.acao}"/>
+			    <p:commandButton value="ok" onclick="excluirComplete.hide()"/>
+		    </h:panelGrid>
+		</h:form>    
+		</p:dialog>
+		
+		
+		<p:dialog    widgetVar="alterarListaComplete" modal="true" >
+		<h:form id="formalterarListaComplete">
+			<h:panelGrid columns="1" border="0" >
+			    <p:outputLabel id="acao" value="#{listaSegmentadaMBean.acao}"/>
+			    <p:commandButton value="ok" onclick="alterarListaComplete.hide()"/>
+		    </h:panelGrid>
+		</h:form>    
+		</p:dialog>
+		
+		
+		
+		<p:dialog    widgetVar="modalOk" modal="true" >
+			<form id="formOk">
+			    <p:commandButton value="OK" update=":formListaSegmentada:listDetail"  oncomplete="modalOk.hide();"/>
+			</form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

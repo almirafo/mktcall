@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0"
+	xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	<persistence-unit name="MktCallJPA" >
+		<provider>org.hibernate.ejb.HibernatePersistence</provider> 
+	   
+	    <jta-data-source>jdbc/MktCall</jta-data-source>
+		 <!--
+		 transaction-type="RESOURCE_LOCAL" -->
+		<!-- name="MktCallJPA" -->
+		
+				<!-- org.hibernate.ejb.HibernatePeristence -->
+	<!--  	<jta-data-source>jdbc/MktCall</jta-data-source>
+        -->
+
+		
+		<class>br.com.supportcomm.mktcall.entity.AccessOutoftime</class>
+		<class>br.com.supportcomm.mktcall.entity.Agencia</class>
+		<class>br.com.supportcomm.mktcall.entity.AreaCode</class>
+		<class>br.com.supportcomm.mktcall.entity.Cfu</class>
+		<class>br.com.supportcomm.mktcall.entity.Region</class>
+		<class>br.com.supportcomm.mktcall.entity.Anunciante</class>
+		<class>br.com.supportcomm.mktcall.entity.CadastroParticipante</class>
+		<class>br.com.supportcomm.mktcall.entity.Campanha</class>
+		<class>br.com.supportcomm.mktcall.entity.Cdr</class>
+		<class>br.com.supportcomm.mktcall.entity.Estimulo</class>
+		<class>br.com.supportcomm.mktcall.entity.Insertion</class>
+		<class>br.com.supportcomm.mktcall.entity.ListaGeral</class>
+		<class>br.com.supportcomm.mktcall.entity.MsisdnCampanha</class>
+		<class>br.com.supportcomm.mktcall.entity.Spot</class>
+		<class>br.com.supportcomm.mktcall.entity.SpotAudioFile</class>
+		<class>br.com.supportcomm.mktcall.entity.SpotResponse</class>
+		<class>br.com.supportcomm.mktcall.entity.SpotTipo</class>
+		<class>br.com.supportcomm.mktcall.entity.Statistic</class>
+		<class>br.com.supportcomm.mktcall.entity.UserAccess</class>
+		<class>br.com.supportcomm.mktcall.entity.UserType</class>
+		<class>br.com.supportcomm.mktcall.entity.UserHistory</class>
+		<class>br.com.supportcomm.mktcall.entity.LastCallMsisdn</class>
+		<class>br.com.supportcomm.mktcall.vo.ListaFidelizadaVO</class>
+		<class>br.com.supportcomm.mktcall.vo.ListaInteracaoVO</class>
+		<class>br.com.supportcomm.mktcall.vo.ListaDuracaoVO</class>
+		<class>br.com.supportcomm.mktcall.vo.ListaEfetividadeVO</class>
+		<class>br.com.supportcomm.mktcall.vo.ListaEfetividadeConsolidadaVO</class>
+		<class>br.com.supportcomm.mktcall.vo.ListaCampanhaDialOutVO</class>
+		
+		<class>br.com.supportcomm.mktcall.vo.ListaCampanhaVO</class>
+		<class>br.com.supportcomm.mktcall.entity.InitialConfig</class>
+		<class>br.com.supportcomm.mktcall.entity.ListDetail</class>
+		<class>br.com.supportcomm.mktcall.entity.ListSegmentation</class>
+		<class>br.com.supportcomm.mktcall.entity.ListSegmentationPK</class>
+		<class>br.com.supportcomm.mktcall.entity.ControlFlow</class>
+		<class>br.com.supportcomm.mktcall.entity.Foward</class>
+		<class>br.com.supportcomm.mktcall.entity.Config</class>
+		
+		
+		
+		<properties>
+
+			<property name="hibernate.connection.username" value="postgres" />
+			<property name="hibernate.connection.driver_class" value="org.postgresql.Driver" />
+			<property name="hibernate.connection.password" value="postgres" />
+			<property name="hibernate.connection.url" value="jdbc:postgresql://192.168.3.108:5432/db_MktCall" />
+			<property name="hibernate.connection.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+            <property name="hibernate.show_sql" value = "true" />
+            <property name="current_session_context_class" value="thread"/>
+            
+		</properties>
+	</persistence-unit>
+</persistence>

@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/paginas/template.xhtml">
+
+	<ui:define name="conteudo">
+		<h:body>
+			<div id="login-content">
+				<p:messages />
+				<div id="left-box">
+					<h3>
+						<h:outputText value="#{rotulo.servicoChamadas}" />
+					</h3>
+					<p>
+						<h:outputText value="#{rotulo.textoPaginaLogin}" />
+					</p>
+				</div>
+				<div id="right-box">
+					<h3>
+						<h:outputText value="#{rotulo.acesse}" />
+					</h3>
+					<h:form id="formLogin">
+						<div id="login-left">
+							<div class="form-item-login">
+								<h:outputLabel
+									value="*#{rotulo.login}"
+									for="login" />
+								<h:inputText
+									value="#{loginMBean.login}"
+									id="login"
+									required="true"
+									validatorMessage="#{rotulo.login}: #{rotulo.erroTamanho3}"
+									requiredMessage="#{rotulo.login}: #{rotulo.campoObrigatorio}">
+									<f:validateLength
+										maximum="50"
+										minimum="3" />
+								</h:inputText>
+							</div>
+							<div class="form-item-senha">
+								<h:outputLabel
+									value="*#{rotulo.senha}"
+									for="senha" />
+								<h:inputSecret
+									value="#{loginMBean.senha}"
+									id="senha"
+									required="true"
+									validatorMessage="#{rotulo.senha}: #{rotulo.erroTamanho4}"
+									requiredMessage="#{rotulo.senha}: #{rotulo.campoObrigatorio}">
+									<f:validateLength
+										maximum="50"
+										minimum="4" />
+								</h:inputSecret>
+							</div>
+						</div>
+						<div id="login-right">
+							<div class="form-item-entrar">
+								<h:commandButton
+									id="button"
+									value="#{rotulo.entrar}"
+									action="#{loginMBean.autenticarUsuario}" />
+							</div>
+						</div>
+					</h:form>
+					<p>&nbsp;</p>
+				</div>
+			</div>
+		</h:body>
+	</ui:define>
+
+</ui:composition>

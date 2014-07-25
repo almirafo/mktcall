@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/paginas/template.xhtml">
+	<ui:define name="conteudo">
+		<h:form id="formControleDialOut" prependId="false">
+			<div id="primary-menu">
+				<ul>
+					<li class="active"><h:commandLink
+							value="#{rotulo.campanhas}"
+							action="#{controleDialMBean.iniciarCampanha}"
+							id="menuCampanhas" /></li>
+					<li><h:commandLink
+							value="#{rotulo.spots}"
+							action="#{spotMBean.iniciarSpot}"
+							id="menuSpots" /></li>
+					<li><h:commandLink
+							value="#{rotulo.agencias}"
+							action="#{agenciaMBean.iniciarAgencia}"
+							id="menuAgencias"
+							rendered="#{loginMBean.isAdmin}" /></li>
+					<li><h:commandLink
+							value="#{rotulo.anunciantes}"
+							action="#{anuncianteMBean.iniciarAnunciante}"
+							id="menuAnunciantes"
+							rendered="#{loginMBean.isAdmin or loginMBean.isAgencia}" /></li>
+					<li><h:commandLink
+							value="#{rotulo.usuarios}"
+							action="#{usuarioMBean.iniciarUsuario}"
+							id="menuUsuarios"
+							rendered="#{loginMBean.isAdmin}" /></li>
+					<li><h:commandLink
+							value="#{rotulo.listaSegmentada}"
+							action="#{listaSegmentadaMBean.iniciarListaSegmentada}"
+							id="menuListaFidelizada" /></li>
+					<li><h:commandLink
+							value="#{rotulo.relatorios}"
+							action="#{relatorioMBean.iniciar}"
+							id="menuRelatorios" /></li>
+					<li class="last"><h:commandLink
+							value="#{rotulo.sair}"
+							action="#{loginMBean.encerraSessao}"
+							id="sair" /></li>
+				</ul>
+			</div>
+
+			<div id="secondary-menu">
+				<ul>
+					<li><h:link
+							value="#{rotulo.listar} #{rotulo.campanhas}"
+							outcome="campanha"
+							id="#{rotulo.listarCampanha}" /></li>
+					<li><h:link
+							outcome="controleDialOut" rendered="#{loginMBean.isAdmin}"
+							value="#{rotulo.controleDialOutLink}">
+					</h:link></li>
+				</ul>
+			</div>
+			<br/>
+
+			<div id="round-border">
+				<h3>
+					<h:outputText value="#{rotulo.controleDialOutLink}" />
+				</h3>
+				<p:messages id="messages" />
+
+					<p:dataTable
+					var="campanha"
+					value="#{controleDialMBean.campanhaAll}"
+					id="campanha"
+					paginator="true"
+					rows="10"
+					selectionMode="single"
+					selection="#{controleDialMBean.controleDialSelecionada}"
+					rowKey="#{campanha.idCampanha}"
+					
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10,15">
+					
+					 <p:ajax event="rowSelect" update=":formCampanhaDetalhe" oncomplete="modalCampanhaDetalhe.show()" /> 
+					 
+					 
+					<p:column
+						headerText="#{rotulo.controleDialOutNomeCampanha}"
+						styleClass="text-align:center;"
+						sortBy="#{campanha.nomeCampanha}"
+						filterBy="#{campanha.nomeCampanha}"
+						filterMatchMode="contains">
+						<h:outputText value="#{campanha.nomeCampanha}" />
+					</p:column>
+					
+					<p:column
+						headerText="#{rotulo.controleDialOutContratado}"
+						styleClass="text-align:center;">
+						<h:outputText value="#{campanha.contratado}" />
+					</p:column>
+					
+					<p:column
+						headerText="#{rotulo.controleDialOutCompletos}"
+						styleClass="text-align:center;">
+						<h:outputText value="#{campanhacompletos}" />
+					</p:column>
+					
+					<p:column
+						headerText="#{rotulo.controleDialOutIncompletos}"
+						styleClass="text-align:center;">
+						<h:outputText value="#{campanha.incompletos}" />
+					</p:column>
+
+					<p:column
+						headerText="#{rotulo.controleDialOutProcessStatus}"
+						styleClass="text-align:center;">
+						
+						<h:graphicImage	library="images" name="icon_blue_dot.png"   title="#{rotulo.controleDialOutterminado}"        rendered="#{campanha.processStatus=='1'}"/>
+  					    <h:graphicImage library="images" name="icon_red_dot.png"    title="#{rotulo.controleDialOutparado}"           rendered="#{campanha.processStatus=='0'}"/>
+  					    <h:graphicImage library="images" name="icon_yellow_dot.png" title="#{rotulo.controleDialOutemprocessamento}" rendered="#{campanha.processStatus=='2'}"/>
+  					    <h:graphicImage library="images" name="icon_green_dot.png"  title="#{rotulo.controleDialOutpreparado}"        rendered="#{campanha.processStatus=='3'}"/>
+  					    <h:graphicImage library="images" name="Phone-icon.png"    height="32px" width="32px"   title="discando"        rendered="#{campanha.processStatus=='4'}"/>
+					</p:column>
+
+					
+					</p:dataTable>
+			</div>
+
+		</h:form>
+		
+			<p:dialog
+			widgetVar="modalCampanhaDetalhe"
+			modal="true"
+			width="450"
+			resizable="true"
+			height="250"
+			
+			onHide="labels();"
+			showEffect="explode" hideEffect="explode"
+			header="Campanha Detalhe do DialOut">
+			<h:form
+				id="formCampanhaDetalhe"
+				prependId="false">
+				<div id="formulario">
+			        <h:panelGrid id="display" columns="2" cellpadding="4">			
+			            
+			            <h:outputText value="#{rotulo.controleDialOutNomeCampanha}" />
+			            <h:outputText value="#{controleDialMBean.controleDialSelecionada.nomeCampanha}" size="32" required="true"/>  
+			
+			
+			            <h:outputText value="#{rotulo.controleDialOutProcessStatus}" />
+			            
+			            <h:outputText value="#{rotulo.controleDialOutterminado}"       rendered="#{controleDialMBean.controleDialSelecionada.processStatus=='1'}"/>
+  					    <h:outputText value="#{rotulo.controleDialOutparado}"          rendered="#{controleDialMBean.controleDialSelecionada.processStatus=='0'}"/>
+  					    <h:outputText value="#{rotulo.controleDialOutemprocessamento}" rendered="#{controleDialMBean.controleDialSelecionada.processStatus=='2'}"/>
+  					    <h:outputText value="#{rotulo.controleDialOutpreparado}"       rendered="#{controleDialMBean.controleDialSelecionada.processStatus=='3'}"/>
+			            <h:outputText value="discando"       rendered="#{controleDialMBean.controleDialSelecionada.processStatus=='4'}"/>
+			        </h:panelGrid>
+			        <h:panelGrid id="botoes" columns="2" cellpadding="4">
+			            <p:commandButton value="Iniciar dialOut"  rendered="#{controleDialMBean.controleDialSelecionada.processStatus=='0'}" actionListener="#{controleDialMBean.alterarLista}"  update=":formControleDialOut:campanha :formOk:acao" oncomplete="modalCampanhaDetalhe.hide(); modalOk.show()"/>
+				        
+				        <h:outputText value="Processo já iniciado não pode mais voltar"   style="font-weight:bold"   rendered="#{controleDialMBean.controleDialSelecionada.processStatus!='0'}"/>
+				       
+			        </h:panelGrid>
+			        
+			     </div>
+        	</h:form>
+    	</p:dialog>
+		
+		
+
+ 		
+		<p:dialog showEffect="explode" hideEffect="explode"   widgetVar="modalOk" modal="true" >
+			<h:form id="formOk">
+			   <p:outputLabel id="acao" value="#{controleDialMBean.acao}"/>
+			    <p:commandButton value="OK" update=":formControleDialOut:campanha"  oncomplete="modalOk.hide();"/>
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,377 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/paginas//template.xhtml">
+	<ui:define name="conteudo">
+		<h:form id="formAnunciante">
+			<f:event
+				type="preRenderComponent"
+				listener="#{anuncianteMBean.permiteAcesso}" />
+			<div id="primary-menu">
+				<ul>
+					<li><h:commandLink
+							value="#{rotulo.campanhas}"
+							action="#{campanhaMBean.iniciarCampanha}"
+							id="menuCampanhas" /></li>
+					<li><h:commandLink
+							value="#{rotulo.spots}"
+							action="#{spotMBean.iniciarSpot}"
+							id="menuSpots" /></li>
+					<li><h:commandLink
+							value="#{rotulo.agencias}"
+							action="#{agenciaMBean.iniciarAgencia}"
+							id="menuAgencias"
+							rendered="#{loginMBean.isAdmin}" /></li>
+					<li class="active"><h:commandLink
+							value="#{rotulo.anunciantes}"
+							action="#{anuncianteMBean.iniciarAnunciante}"
+							id="menuAnunciantes"
+							rendered="#{loginMBean.isAdmin or loginMBean.isAgencia}" /></li>
+					<li><h:commandLink
+							value="#{rotulo.usuarios}"
+							action="#{usuarioMBean.iniciarUsuario}"
+							id="menuUsuarios"
+							rendered="#{loginMBean.isAdmin}" /></li>
+					<li><h:commandLink
+							value="#{rotulo.listaSegmentada}"
+							action="#{listaSegmentadaMBean.iniciarListaSegmentada}"
+							id="menuListaFidelizada" /></li>
+					<li><h:commandLink
+							value="#{rotulo.relatorios}"
+							action="#{relatorioMBean.iniciar}"
+							id="menuRelatorios" /></li>
+					<li class="last"><h:commandLink
+							value="#{rotulo.sair}"
+							action="#{loginMBean.encerraSessao}"
+							id="sair" /></li>
+				</ul>
+			</div>
+			<div id="secondary-menu">
+				<ul>
+					<li><h:commandLink
+							value="#{rotulo.listar} #{rotulo.anunciantes}"
+							actionListener="#{anuncianteMBean.iniciar}"
+							id="#{rotulo.listarAnunciante}" /></li>
+					<li><p:commandLink
+							value="#{rotulo.novo} #{rotulo.anunciante}"
+							actionListener="#{anuncianteMBean.iniciar}"
+							id="#{rotulo.novoAnunciante}"
+							oncomplete="modalSalvarAnunciante.show();"
+							update=":formSalvarAnunciante" /></li>
+				</ul>
+			</div>
+			<br />
+			<div id="round-border">
+				<h3>
+					<h:outputText value="#{rotulo.listarTodasAnunciantes}" />
+				</h3>
+				<p:messages id="messages" />
+				<p:dataTable
+					var="anunciante"
+					value="#{anuncianteMBean.listaAnunciantes}"
+					id="anuncianteList"
+					widgetVar="anuncianteList"
+					paginator="true"
+					rows="10"
+					emptyMessage="#{rotulo.naoHaAnunciantes}"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10,15">
+					<p:column
+						headerText="#{rotulo.razaoSocial}"
+						styleClass="text-align:center;"
+						sortBy="#{anunciante.razaoSocial}"
+						filterBy="#{anunciante.razaoSocial}">
+						<h:outputText value="#{anunciante.razaoSocial}"/>
+						
+					</p:column>
+					<p:column
+						headerText="#{rotulo.contato}"
+						styleClass="text-align:center;"
+						sortBy="#{anunciante.nomeContato}"
+						filterBy="#{anunciante.nomeContato}">
+						<h:outputText value="#{anunciante.nomeContato}" />
+					</p:column>
+					<p:column
+						headerText="#{rotulo.email}"
+						styleClass="text-align:center;"
+						sortBy="#{anunciante.email}"
+						filterBy="#{anunciante.email}">
+						<h:outputText value="#{anunciante.email}" />
+					</p:column>
+					<p:column
+						headerText="#{rotulo.telefone}"
+						styleClass="text-align:center;"
+						sortBy="#{anunciante.telefone}"
+						filterBy="#{anunciante.telefone}">
+						<h:outputText value="#{anunciante.telefone}" />
+					</p:column>
+					<p:column
+						headerText="#{rotulo.agencia}"
+						styleClass="text-align:center;"
+						sortBy="#{anunciante.agencia.nomeContato}"
+						filterBy="#{anunciante.agencia.nomeContato}">
+						<h:outputText value="#{anunciante.agencia.nomeContato}" />
+					</p:column>
+					<p:column
+						headerText="#{rotulo.dataCadastro}"
+						styleClass="text-align:center;"
+						sortBy="#{anunciante.operationDate}"
+						filterBy="#{anunciante.operationDate}">
+						<h:outputText value="#{anunciante.operationDate}">
+							<f:converter converterId="DataConverter" />
+						</h:outputText>
+					</p:column>
+					<p:column
+						headerText="#{rotulo.status}"
+						styleClass="text-align:center;"
+						sortBy="#{anunciante.status}"
+						filterBy="#{anunciante.status}">
+						<h:outputText value="#{anunciante.status}">
+							<f:converter converterId="StatusConverter" />
+						</h:outputText>
+					</p:column>
+					<p:column
+						style="width:64px"
+						headerText="#{rotulo.acoes}"
+						id="#{rotulo.idAcoes}">
+						<p:commandButton
+							onclick="modalExcluirAnunciante.show()"
+							title="#{rotulo.remover}"
+							alt="#{rotulo.remover}"
+							icon="ui-icon ui-icon-close"
+							id="#{rotulo.excluirAnunciante}">
+							<f:setPropertyActionListener
+								value="#{anunciante}"
+								target="#{anuncianteMBean.anuncianteSelecionado}" />
+						</p:commandButton>
+						<p:commandButton
+							title="#{rotulo.alterar}"
+							alt="#{rotulo.alterar}"
+							update=":formSalvarAnunciante"
+							onclick="modalSalvarAnunciante.show()"
+							id="#{rotulo.alterarAnunciante}"
+							icon="ui-icon-arrowrefresh-1-w">
+							<f:setPropertyActionListener
+								value="#{anunciante}"
+								target="#{anuncianteMBean.anuncianteSelecionado}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</div>
+		</h:form>
+
+		<p:confirmDialog
+			message="#{rotulo.exclusaoAnunciante}"
+			modal="true"
+			widgetVar="modalExcluirAnunciante">
+			<h:form>
+				<p:commandButton
+					value="#{rotulo.sim}"
+					update=":formAnunciante:messages,:formAnunciante"
+					oncomplete="modalExcluirAnunciante.hide();labels();"
+					actionListener="#{anuncianteMBean.excluirAnunciante}" />
+				<p:commandButton
+					value="#{rotulo.nao}"
+					onclick="modalExcluirAnunciante.hide();labels();"
+					type="button" />
+			</h:form>
+		</p:confirmDialog>
+		<p:dialog
+			widgetVar="modalSalvarAnunciante"
+			modal="true"
+			width="570"
+			resizable="false"
+			height="500"
+			onCloseUpdate="messages"
+			onHide="labels();"
+			header="#{rotulo.anunciante}">
+			<h:form id="formSalvarAnunciante">
+				<div
+					id="formulario"
+					align="left">
+					<p:messages id="messageSalvar" />
+					<table width="500px">
+						<tr>
+							<td
+								width="150px"
+								align="left"><h:outputLabel value="#{rotulo.razaoSocial}" /></td>
+							<td
+								width="350px"
+								align="left"><h:inputText
+									value="#{anuncianteMBean.anuncianteSelecionado.razaoSocial}"
+									id="razaoSocial"
+									required="true"
+									validatorMessage="#{rotulo.razaoSocial}: #{rotulo.erroTamanhoRazaoSocial}"
+									requiredMessage="#{rotulo.razaoSocial}: #{rotulo.campoObrigatorio}">
+									<f:validateLength
+										maximum="50"
+										minimum="3" />
+								</h:inputText></td>
+						</tr>
+						<tr>
+							<td
+								width="150px"
+								align="left"><h:outputLabel value="#{rotulo.contato}" /></td>
+							<td
+								width="350px"
+								align="left"><h:inputText
+									value="#{anuncianteMBean.anuncianteSelecionado.nomeContato}"
+									id="nomeContato"
+									required="true"
+									validatorMessage="#{rotulo.contato}: #{rotulo.erroTamanho3}"
+									requiredMessage="#{rotulo.contato}: #{rotulo.campoObrigatorio}"
+									converterMessage="">
+									<f:validateLength
+										maximum="50"
+										minimum="3" />
+								</h:inputText></td>
+						</tr>
+						<tr>
+							<td
+								width="150px"
+								align="left"><h:outputLabel value="#{rotulo.email}" /></td>
+							<td
+								width="350px"
+								align="left"><h:inputText
+									value="#{anuncianteMBean.anuncianteSelecionado.email}"
+									id="email"
+									required="true"
+									requiredMessage="#{rotulo.email}: #{rotulo.campoObrigatorio}">
+									<f:validateLength
+										maximum="50"
+										minimum="3" />
+									<f:validator validatorId="EmailValidador" />
+								</h:inputText></td>
+						</tr>
+						<tr>
+							<td
+								width="150px"
+								align="left"><h:outputLabel value="#{rotulo.telefone}" /></td>
+							<td
+								width="350px"
+								align="left"><p:inputMask
+									mask="(99)99999-999?9"
+									value="#{anuncianteMBean.anuncianteSelecionado.telefone}"
+									id="telefone"
+									required="true"
+									requiredMessage="#{rotulo.telefone}: #{rotulo.campoObrigatorio}">
+								</p:inputMask></td>
+						</tr>
+						<tr>
+							<td align="left"><h:outputLabel
+									for="agencia"
+									value=" #{rotulo.agencia}" /></td>
+							<td align="left"><h:selectOneListbox
+									size="1"
+									disabled="#{anuncianteMBean.desabilitarComponente}"
+									value="#{anuncianteMBean.anuncianteSelecionado.agencia.idAgencia}"
+									id="agencia"
+									required="true"
+									requiredMessage="#{rotulo.agencia}: #{rotulo.campoObrigatorio}">
+									<f:selectItem
+										itemLabel="#{rotulo.selecione}"
+										itemValue="0" />
+									<f:selectItems value="#{anuncianteMBean.listaAgencias}" />
+								</h:selectOneListbox></td>
+						</tr>
+						<tr>
+							<td
+								colspan="2"
+								align="left"><h:outputLabel value="#{rotulo.status}" /></td>
+						</tr>
+						<tr>
+							<td
+								colspan="2"
+								align="left"><h:selectOneRadio
+									disabled="#{campanhaMBean.userType == 4}"
+									value="#{anuncianteMBean.anuncianteSelecionado.status}"
+									id="statusCampanha">
+									<f:selectItem
+										itemValue="0"
+										itemLabel="#{rotulo.inativo}" />
+									<f:selectItem
+										itemValue="1"
+										itemLabel="#{rotulo.ativo}" />
+								</h:selectOneRadio></td>
+						</tr>
+						<tr>
+							<td
+								colspan="2"
+								align="left"><h:outputLabel value="#{rotulo.usuario}" /></td>
+						</tr>
+						<tr>
+							<td
+								width="150px"
+								align="left"><h:outputLabel value="#{rotulo.login}" /></td>
+							<td
+								width="350px"
+								align="left"><h:inputText
+									value="#{anuncianteMBean.anuncianteSelecionado.userAccess.login}"
+									disabled="#{anuncianteMBean.anuncianteSelecionado.idAnunciante != null}"
+									id="login"
+									required="true"
+									requiredMessage="#{rotulo.login}: #{rotulo.campoObrigatorio}">
+									<f:validator validatorId="UserValidador" />
+									<f:validateLength
+										maximum="50"
+										minimum="3" />
+								</h:inputText></td>
+						</tr>
+						<tr>
+							<td
+								width="150px"
+								align="left"><h:outputLabel value="#{rotulo.senha}" /></td>
+							<td
+								width="350px"
+								align="left"><h:inputSecret
+									value="#{anuncianteMBean.anuncianteSelecionado.userAccess.password}"
+									id="password" redisplay="true"
+									required="true" 
+									validatorMessage="#{rotulo.senha}: #{rotulo.passwordNaoDigitada}"
+									requiredMessage="#{rotulo.senha}: #{rotulo.campoObrigatorio}"
+									converterMessage="">
+									<f:validateLength
+										maximum="50"
+										minimum="6" />
+								</h:inputSecret></td>
+						</tr>
+					</table>
+					<p class="botoes">
+						<p:commandButton
+							update="messageSalvar,:formAnunciante"
+							id="enviar"
+							value="#{rotulo.salvar}"
+							action="#{anuncianteMBean.salvarAnunciante}"
+							oncomplete="handleSalvarRequest(xhr, status, args)"
+							ajax="false" />
+						<p:commandButton
+							type="reset"
+							value="#{rotulo.limpar}"
+							id="#{rotulo.limpar}" />
+					</p>
+
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<script type="text/javascript">
+			function handleSalvarRequest(xhr, status, args) {
+				if (args.validationFailed || !args.sucesso) {
+					jQuery('#modalSalvarAnunciante').parent().effect("shake", {
+						times : 3
+					}, 100);
+				} else {
+					modalSalvarAnunciante.hide();
+					labels();
+				}
+			}
+		</script>
+
+	</ui:define>
+
+</ui:composition>

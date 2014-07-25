@@ -1,0 +1,758 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/paginas/template.xhtml">
+	<ui:define name="conteudo">
+		<h:form id="formCampanha">
+			<f:event
+				type="preRenderComponent"
+				listener="#{campanhaMBean.permiteAcesso}" />
+			<div id="primary-menu">
+				<ul>
+					<li class="active"><h:commandLink
+							value="#{rotulo.campanhas}"
+							action="#{campanhaMBean.iniciarCampanha}"
+							id="menuCampanhas" /></li>
+					<li><h:commandLink
+							value="#{rotulo.spots}"
+							action="#{spotMBean.iniciarSpot}"
+							id="menuSpots" /></li>
+					<li><h:commandLink
+							value="#{rotulo.agencias}"
+							action="#{agenciaMBean.iniciarAgencia}"
+							id="menuAgencias"
+							rendered="#{loginMBean.isAdmin}" /></li>
+					<li><h:commandLink
+							value="#{rotulo.anunciantes}"
+							action="#{anuncianteMBean.iniciarAnunciante}"
+							id="menuAnunciantes"
+							rendered="#{loginMBean.isAdmin or loginMBean.isAgencia}" /></li>
+					<li><h:commandLink
+							value="#{rotulo.usuarios}"
+							action="#{usuarioMBean.iniciarUsuario}"
+							id="menuUsuarios"
+							rendered="#{loginMBean.isAdmin}" /></li>
+					<li><h:commandLink
+							value="#{rotulo.listaSegmentada}"
+							action="#{listaSegmentadaMBean.iniciarListaSegmentada}"
+							id="menuListaFidelizada" /></li>
+					<li><h:commandLink
+							value="#{rotulo.relatorios}"
+							action="#{relatorioMBean.iniciar}"
+							id="menuRelatorios" /></li>
+					<li class="last"><h:commandLink
+							value="#{rotulo.sair}"
+							action="#{loginMBean.encerraSessao}"
+							id="sair" /></li>
+				</ul>
+			</div>
+			<div id="secondary-menu">
+				<ul>
+					<li><h:commandLink
+							value="#{rotulo.listar} #{rotulo.campanhas}"
+							actionListener="#{campanhaMBean.iniciarCampanha}"
+							id="#{rotulo.listarCampanha}" /></li>
+					<li><p:commandLink
+							value="#{rotulo.nova} #{rotulo.campanha}"
+							id="#{rotulo.novaCampanha}"
+							actionListener="#{campanhaMBean.novaCampanha}"
+							oncomplete="modalSalvarCampanha.show();"
+							update=":formSalvarCampanha">
+							<f:attribute
+								name="action"
+								value="#{nova}" />
+						</p:commandLink></li>
+					<li><h:link
+							outcome="controleDialOut" rendered="#{loginMBean.isAdmin}"
+							
+							value="#{rotulo.controleDialOutLink}">
+					</h:link></li>
+					
+					
+				</ul>
+			</div>
+			<br />
+			<div id="round-border">
+				<h3>
+					<h:outputText value="#{rotulo.listarTodasCampanhas}" />
+				</h3>
+				<p:messages id="messages"  autoUpdate="true"/>
+				<p:dataTable
+					var="campanha"
+					value="#{campanhaMBean.listaCampanhas}"
+					id="campanhaList"
+					paginator="true"
+					rows="10"
+					selectionMode="single"
+					selection="#{campanhaMBean.campanhaSelecionada}"
+					
+					rowKey="#{campanha.idCampanha}"
+					emptyMessage="#{rotulo.naoHaCampanhas}"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10,15">
+					
+					 <p:ajax event="rowSelect" update=":formSalvarCampanha" oncomplete="modalSalvarCampanha.show();showMdivulga()" />  
+
+					<p:column
+						headerText="#{rotulo.campanha}"
+						styleClass="text-align:center;"
+						sortBy="#{campanha.name}"
+						filterBy="#{campanha.name}"
+						filterMatchMode="contains">
+						<h:outputText value="#{campanha.name}" title="Qtd. Executada: #{campanha.insertionReach + campanha.insertionReachComplement} de #{campanha.insertionContracted}"/>
+					</p:column>
+					<p:column
+						headerText="#{rotulo.criadopor}"
+						styleClass="text-align:center;"
+						sortBy="#{campanha.userAccess.login}"
+						filterBy="#{campanha.userAccess.login}"
+						filterMatchMode="contains">
+
+						<h:outputText value="#{campanha.userAccess.login}">
+
+						</h:outputText>
+
+					</p:column>
+					<p:column
+						headerText="#{rotulo.inicio}"
+						styleClass="text-align:center;"
+						sortBy="#{campanha.startDatatime}"
+						filterBy="#{campanha.startDatatime}">
+						<h:outputText value="#{campanha.startDatatime}">
+							<f:converter converterId="DataConverter" />
+						</h:outputText>
+
+					</p:column>
+					<p:column
+						headerText="#{rotulo.fim}"
+						styleClass="text-align:center;"
+						sortBy="#{campanha.endDatetime}"
+						filterBy="#{campanha.endDatetime}">
+						<h:outputText value="#{campanha.endDatetime}">
+							<f:converter converterId="DataConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column
+						headerText="#{rotulo.alterada}"
+						styleClass="text-align:center;"
+						sortBy="#{campanha.operationDate}"
+						filterBy="#{campanha.operationDate}">
+						<h:outputText value="#{campanha.operationDate}">
+							<f:converter converterId="DataConverter" />
+						</h:outputText>
+					</p:column>
+					<p:column
+						headerText="#{rotulo.status}"
+						styleClass="text-align:center;"
+						sortBy="#{campanha.status}"
+						filterBy="#{campanha.status}"
+						filterOptions="#{campanhaMBean.statusOptions}"
+						filterMatchMode="exact"
+						>
+						<h:outputText value="#{campanha.status}">
+							<f:converter converterId="StatusConverter" />
+						</h:outputText>
+					</p:column>
+					<p:column
+						headerText="#{rotulo.prioridade}"
+						styleClass="text-align:center;">
+						<h:outputText value="#{campanha.priority}">
+						</h:outputText>
+					</p:column>
+
+				</p:dataTable>
+			</div>
+		</h:form>
+
+		<p:confirmDialog
+			message="#{rotulo.msgPararCampanha}"
+			modal="true"
+			widgetVar="modalPararCampanha">
+			<h:form>
+				<p:commandButton
+					value="#{rotulo.sim}"
+					ajax="false"
+					update=":formCampanha:messages,:formCampanha"
+					oncomplete="modalPararCampanha.hide(;labels();)"
+					actionListener="#{campanhaMBean.pararCampanha}" />
+				<p:commandButton
+					value="#{rotulo.nao}"
+					ajax="false"
+					onclick="modalPararCampanha.hide();labels();" />
+			</h:form>
+		</p:confirmDialog>
+
+		<p:dialog
+			widgetVar="modalSalvarCampanha"
+			modal="true"
+			width="550"
+			resizable="true"
+			height="650"
+			onCloseUpdate=":messages"
+			onHide="labels();"
+			header="#{rotulo.campanha}">
+			<h:form
+				id="formSalvarCampanha"
+				prependId="false">
+				<div id="formulario">
+
+
+					<p:messages id="messageSalvar"  autoUpdate="true"/>
+					<table width="400px">
+						<tr>
+							<td
+								width="30%"
+								align="left"><h:outputLabel value="#{rotulo.nomeCampanha}" /></td>
+							<td
+								width="70%"
+								align="left"><h:inputText
+									value="#{campanhaMBean.campanhaSelecionada.name}"
+									id="nomeCampanha"
+									required="true"
+									title="#{rotulo.erroTamanho3To50}"
+									validatorMessage="#{rotulo.nomeCampanha}: #{rotulo.erroTamanho3To50}"
+									requiredMessage="#{rotulo.nomeCampanha}: #{rotulo.campoObrigatorio}">
+									<f:validateLength
+										maximum="50"
+										minimum="3" />
+								</h:inputText></td>
+						</tr>
+						<tr>
+							<td align="left"><h:outputLabel value="#{rotulo.descricao}" /></td>
+							<td align="left"><h:inputTextarea
+									value="#{campanhaMBean.campanhaSelecionada.description}"
+									id="descCampanha"
+									title="#{rotulo.msgDescricao}"
+									style="width:250px;height:100px;"
+									rows="40"
+									validatorMessage="#{rotulo.msgDescricao}">
+									<f:validateLength maximum="255" />
+								</h:inputTextarea></td>
+						</tr>
+
+						
+
+						<tr>
+							<td align="left"><h:outputLabel value="#{rotulo.duracao}" /></td>
+							<td align="left">
+							
+							<h:selectOneListbox
+									id="callDuration"
+									size="1"
+									value="#{campanhaMBean.callDuration}"
+									required="true"
+									requiredMessage="#{rotulo.duracao}: #{rotulo.campoObrigatorio}">
+
+									<f:selectItems value="#{campanhaMBean.listaCallDuration}" />
+								</h:selectOneListbox>
+							
+								
+								</td>
+						</tr>
+
+
+						<tr>
+							<td align="left"><h:outputLabel
+									for="spotCampanha"
+									value="#{rotulo.spot}" /></td>
+							<td align="left"><h:selectOneListbox
+									id="spotCampanha"
+									size="1"
+									value="#{campanhaMBean.idSpot}"
+									required="true"
+									disabled="#{campanhaMBean.changeSpot}"
+									requiredMessage="#{rotulo.spot}: #{rotulo.campoObrigatorio}">
+									<f:selectItem
+										itemValue=""
+										itemLabel="#{rotulo.selecione}" />
+									<f:selectItems value="#{campanhaMBean.listaSpot}" />
+								</h:selectOneListbox></td>
+						</tr>
+						
+						<tr>
+							<td align="left"><h:outputLabel
+									for="status"
+									value="#{rotulo.status}" /></td>
+							<td align="left"><h:selectOneListbox
+									id="status"
+									size="1"
+									value="#{campanhaMBean.campanhaSelecionada.status}"
+									immediate="true"
+									required="true"
+									requiredMessage="#{rotulo.status}: #{rotulo.campoObrigatorio}">
+									<f:selectItem
+										itemValue="1"
+										itemLabel="#{rotulo.ativa}" />									
+									<f:selectItem
+										itemValue="0"
+										itemLabel="#{rotulo.inativa}" />
+								</h:selectOneListbox></td>
+						</tr>
+
+						<tr>
+							<td align="left"><h:outputLabel
+									for="proximaCampanha"
+									value="#{rotulo.unicavez}" /></td>
+							<td align="left"><h:selectOneListbox
+									id="flagImpacto"
+									size="1"
+									value="#{campanhaMBean.campanhaSelecionada.once}"
+									required="true"
+									requiredMessage="#{rotulo.flagImpacto}: #{rotulo.campoObrigatorio}">
+									<f:selectItem
+										itemValue="FALSE"
+										itemLabel="#{rotulo.inativa}" />
+									<f:selectItem
+										itemValue="TRUE"
+										itemLabel="#{rotulo.ativa}" />
+								</h:selectOneListbox></td>
+						</tr>
+
+						<tr>
+							<td align="left"><h:outputLabel value="#{rotulo.quantidadeContratada}" /></td>
+							<td align="left"><p:inputText
+									id="quantidadeContratada"
+									max="999999999"
+									value="#{campanhaMBean.campanhaSelecionada.insertionContracted}"
+									required="true"
+									onchange="isNumber(this);"
+									title="#{rotulo.soDigitos}"
+									requiredMessage="#{rotulo.quantidadeContratada}: #{rotulo.campoObrigatorio}" readonly="#{campanhaMBean.campanhaSelecionada.insertionReach >0}" />									
+									</td>
+						</tr>
+
+						<tr>
+							<td align="left"><h:outputLabel value="#{rotulo.prioridade}" /></td>
+							<td align="left">
+							
+							<h:selectOneListbox
+									id="prioridade"
+									size="1"
+									value="#{campanhaMBean.campanhaSelecionada.priority}"
+									required="true"
+									requiredMessage="#{rotulo.prioridade}: #{rotulo.campoObrigatorio}">
+                                    <f:selectItem itemValue="" itemLabel="#{rotulo.selecione}" />
+									<f:selectItems value="#{campanhaMBean.listaPrioridade}" />
+								</h:selectOneListbox>
+							
+								</td>									
+						</tr>
+
+
+						<tr>
+							<td align="left"><h:outputLabel
+									for="proximaCampanha"
+									value="#{rotulo.proximaCampanha}" /></td>
+							<td align="left"><h:selectOneListbox
+									id="proximaCampanha"
+									size="1"
+									value="#{campanhaMBean.campanhaSelecionada.nextCampaign}"
+									required="true"
+									requiredMessage="#{rotulo.proximaCampanha}: #{rotulo.campoObrigatorio}">
+									<f:selectItem
+										itemValue="false"
+										itemLabel="#{rotulo.nao}" />
+									<f:selectItem
+										itemValue="true"
+										itemLabel="#{rotulo.sim}" />
+								</h:selectOneListbox></td>
+						</tr>	
+						
+						<tr>
+							<td align="left"><h:outputLabel
+									for="segmentacaoCampanha"
+									value="#{rotulo.segmentacao}" /></td>
+							<td align="left"><h:selectOneListbox
+									id="segmentacaoCampanha"
+									size="1"
+									value="#{campanhaMBean.idListDetail}"
+									required="false"
+									title="#{rotulo.listDetail}">
+									<f:selectItem
+										itemValue=""
+										itemLabel="#{rotulo.selecione}" />
+									<f:selectItems value="#{campanhaMBean.listDetail}" />
+								</h:selectOneListbox></td>
+						</tr>
+
+					</table>
+					
+					
+					
+					
+					 
+					
+					
+					   <p:panelGrid columns="1" border="0" width="460px" >
+							 <f:facet name="header">#{rotulo.periodo}</f:facet> 
+							 <table width="460px">
+						     </table>										
+			            </p:panelGrid>
+
+								<table width="450px">
+								    <col width="225px" />
+								    <col width="225px" />								
+									<tr>
+										<td><h:outputText value="#{rotulo.inicio}" /></td>
+										<td><h:outputText value="#{rotulo.fim}" /></td>
+									</tr>
+									<tr>
+										<td><p:calendar
+												value="#{campanhaMBean.inicioCampanha}"
+												pattern="#{rotulo.pattern}"
+												immediate="true" /></td>
+										<td><p:calendar
+												value="#{campanhaMBean.fimCampanha}"
+												pattern="#{rotulo.pattern}"
+												immediate="true" /></td>
+									</tr>
+								</table>
+					
+					<br />
+					
+                    <div id="dateField">
+					<p:panelGrid columns="1" border="0" width="460px" >
+						 <f:facet name="header">#{rotulo.horario}</f:facet> 
+						 <table width="460px">
+					     </table>										
+		            </p:panelGrid>	            
+			    
+				    <table width="445px">
+				    <col width="100px" />
+				    <col width="50px" />
+				    <col width="125px" />
+				    <col width="45px" />
+				    <col width="125px" />				    
+					<tbody>
+					<tr>
+					<td>
+					    <h:selectBooleanCheckbox id="domingo" value="#{campanhaMBean.campanhaTimes.domingoId}" /> <h:outputText value="#{rotulo.dia1}" />
+					</td>
+				    <td><h:outputText value="#{rotulo.de} :" /></td> 
+				    <td><p:calendar
+								value="#{campanhaMBean.campanhaTimes.domingoInicio}"
+								locale="pt"
+								pattern="HH:mm"
+								timeOnly="true" 
+								title="#{rotulo.formatoHora}"
+								onchange="checkCheckbox(this.value, 'domingo')" /> 
+					</td>			
+					<td><h:outputText value="#{rotulo.ate} :" /></td> 
+					<td><p:calendar
+								value="#{campanhaMBean.campanhaTimes.domingoFim}"
+								locale="pt"
+								pattern="HH:mm"
+								timeOnly="true" 
+								title="#{rotulo.formatoHora}"
+								onchange="checkCheckbox(this.value, 'domingo')" />
+                    </td>									
+					</tr>
+					
+					<tr>
+					<td>
+					    <h:selectBooleanCheckbox id="segunda" value="#{campanhaMBean.campanhaTimes.segundaId}" /> <h:outputText value="#{rotulo.dia2}" />
+					</td>
+				    <td><h:outputText value="#{rotulo.de} :" /></td> 
+				    <td><p:calendar
+									value="#{campanhaMBean.campanhaTimes.segundaInicio}"
+									locale="pt"
+									pattern="HH:mm"
+									timeOnly="true"
+									title="#{rotulo.formatoHora}"
+									onchange="checkCheckbox(this.value, 'segunda')" /> 
+					</td>			
+					<td><h:outputText value="#{rotulo.ate} :" /></td> 
+					<td><p:calendar
+									value="#{campanhaMBean.campanhaTimes.segundaFim}"
+									locale="pt"
+									pattern="HH:mm"
+									timeOnly="true"
+									title="#{rotulo.formatoHora}"
+									onchange="checkCheckbox(this.value, 'segunda')" />
+                    </td>
+					</tr>
+					
+					<tr>
+					<td>
+					    <h:selectBooleanCheckbox id="terca" value="#{campanhaMBean.campanhaTimes.tercaId}" /> <h:outputText value="#{rotulo.dia3}" />
+					</td>
+				    <td><h:outputText value="#{rotulo.de} :" /></td> 
+				    <td><p:calendar
+									value="#{campanhaMBean.campanhaTimes.tercaInicio}"
+									locale="pt"
+									pattern="HH:mm"
+									timeOnly="true"
+									title="#{rotulo.formatoHora}"
+									onchange="checkCheckbox(this.value, 'terca')" /> 
+					</td>			
+					<td><h:outputText value="#{rotulo.ate} :" /></td> 
+					<td><p:calendar
+									value="#{campanhaMBean.campanhaTimes.tercaFim}"
+									locale="pt"
+									pattern="HH:mm"
+									timeOnly="true" 
+									title="#{rotulo.formatoHora}"
+									onchange="checkCheckbox(this.value, 'terca')"/>
+                    </td>
+					</tr>	
+					
+					<tr>
+					<td>
+					    <h:selectBooleanCheckbox id="quarta" value="#{campanhaMBean.campanhaTimes.quartaId}" /> <h:outputText value="#{rotulo.dia4}" />
+					</td>
+				    <td><h:outputText value="#{rotulo.de} :" /></td> 
+				    <td><p:calendar
+									value="#{campanhaMBean.campanhaTimes.quartaInicio}"
+									locale="pt"
+									pattern="HH:mm"
+									timeOnly="true"
+									title="#{rotulo.formatoHora}"
+									onchange="checkCheckbox(this.value, 'quarta')" /> 
+					</td>			
+					<td><h:outputText value="#{rotulo.ate} :" /></td> 
+					<td><p:calendar
+									value="#{campanhaMBean.campanhaTimes.quartaFim}"
+									locale="pt"
+									pattern="HH:mm"
+									timeOnly="true"
+									title="#{rotulo.formatoHora}"
+									onchange="checkCheckbox(this.value, 'quarta')" />
+                    </td>
+					</tr>
+					
+					<tr>
+					<td>
+					    <h:selectBooleanCheckbox id="quinta" value="#{campanhaMBean.campanhaTimes.quintaId}" /> <h:outputText value="#{rotulo.dia5}" />
+					</td>
+				    <td><h:outputText value="#{rotulo.de} :" /></td> 
+				    <td><p:calendar
+									value="#{campanhaMBean.campanhaTimes.quintaInicio}"
+									locale="pt"
+									pattern="HH:mm"
+									timeOnly="true"
+									title="#{rotulo.formatoHora}"
+									onchange="checkCheckbox(this.value, 'quinta')" /> 
+					</td>			
+					<td><h:outputText value="#{rotulo.ate} :" /></td> 
+					<td><p:calendar
+									value="#{campanhaMBean.campanhaTimes.quintaFim}"
+									locale="pt"
+									pattern="HH:mm"
+									timeOnly="true"
+									title="#{rotulo.formatoHora}"
+									onchange="checkCheckbox(this.value, 'quinta')" />
+                    </td>
+					</tr>					
+
+					<tr>
+					<td>
+					    <h:selectBooleanCheckbox id="sexta" value="#{campanhaMBean.campanhaTimes.sextaId}" /> <h:outputText value="#{rotulo.dia6}" />
+					</td>
+				    <td><h:outputText value="#{rotulo.de} :" /></td> 
+				    <td><p:calendar
+									value="#{campanhaMBean.campanhaTimes.sextaInicio}"
+									locale="pt"
+									pattern="HH:mm"
+									timeOnly="true"
+									title="#{rotulo.formatoHora}"
+									onchange="checkCheckbox(this.value, 'sexta')" /> 
+					</td>			
+					<td><h:outputText value="#{rotulo.ate} :" /></td> 
+					<td><p:calendar
+									value="#{campanhaMBean.campanhaTimes.sextaFim}"
+									locale="pt"
+									pattern="HH:mm"
+									timeOnly="true"
+									title="#{rotulo.formatoHora}"
+									onchange="checkCheckbox(this.value, 'sexta')" />
+                    </td>
+					</tr>					
+
+					<tr>
+					<td>
+					    <h:selectBooleanCheckbox id="sabado" value="#{campanhaMBean.campanhaTimes.sabadoId}" /> <h:outputText value="#{rotulo.dia7}" />
+					</td>
+				    <td><h:outputText value="#{rotulo.de} :" /></td> 
+				    <td><p:calendar
+									value="#{campanhaMBean.campanhaTimes.sabadoInicio}"
+									locale="pt"
+									pattern="HH:mm"
+									timeOnly="true"
+									title="#{rotulo.formatoHora}"
+									onchange="checkCheckbox(this.value, 'sabado')" /> 
+					</td>			
+					<td><h:outputText value="#{rotulo.ate} :" /></td> 
+					<td><p:calendar
+									value="#{campanhaMBean.campanhaTimes.sabadoFim}"
+									locale="pt"
+									pattern="HH:mm"
+									timeOnly="true" 
+									title="#{rotulo.formatoHora}"
+									onchange="checkCheckbox(this.value, 'sabado')"/>
+                    </td>
+					</tr>					
+										
+									
+					</tbody>
+					</table>				 
+
+						 
+				</div>		
+					<br />
+					<p:panelGrid columns="1" border="1"  width="100%" >
+						 <f:facet name="header">#{rotulo.region}</f:facet>  
+  					
+						<p:pickList id="area"  value="#{campanhaMBean.areaCodes}" var="areaCode" controlsLocation="left" 
+		                        itemLabel="#{areaCode.description}" itemValue="#{areaCode}" converter="#{areaCodeConverter}">  
+                    
+		                       <f:facet name="sourceCaption">#{rotulo.sourceRegion}</f:facet>  
+        					   <f:facet name="targetCaption">#{rotulo.targetRegion}</f:facet>  
+  
+		               
+		               </p:pickList> 
+					
+					</p:panelGrid>
+
+					  <br />
+
+					 	<!-- MDivulga -->
+ 						<h:panelGrid menuTitle="Foward"  width="100%" >
+ 						 <f:facet name="header">Próxima ação Publicitária</f:facet>  
+							<p:panelGrid columns="2" border="0" styleClass="semBorda" >
+							
+								<h:graphicImage url="/images/Mdivulga.jpg"/>
+								<h:selectBooleanCheckbox   id="seleMDivulga" value="#{campanhaMBean.fowardEnabled}" onchange="showMdivulga();" />
+	
+							</p:panelGrid>
+							<!-- div id="TrMDivulga"  style="display:none"-->
+							<h:panelGrid id="TrMDivulga" columns="2" styleClass="semBorda">		
+															
+								   
+								   <h:outputText value="Habilita Divulgação:"/>
+								   <p:selectOneListbox value="#{campanhaMBean.audioPosition}">
+								            <f:selectItem itemLabel="Antes" itemValue="before" />  
+	            							<f:selectItem itemLabel="Depois" itemValue="after" /> 
+								        </p:selectOneListbox> 
+								   
+	
+								   
+								   <h:outputText value="CFU:"  /> 
+								   <p:inputText value="#{campanhaMBean.fowardCFU}" maxlength="13"/> 
+	
+								   
+								
+	
+							</h:panelGrid>
+							<!-- /div-->
+						</h:panelGrid>
+						<!-- -->
+					
+					<h:panelGrid columns="4" border="0" >
+						<p:commandButton
+							update=":formSalvarCampanha:messageSalvar,:formCampanha"
+							id="salvar"
+							value="#{rotulo.salvar}"
+							action="#{campanhaMBean.salvarCampanha}"
+							ajax="false"
+							oncomplete="handleSalvarRequest(xhr, status, args)" readonly="#{campanhaMBean.campanhaSelecionada.insertionContracted == campanhaMBean.campanhaSelecionada.insertionReach }"/>
+
+						<p:commandButton
+							update=":formSalvarCampanha:messageSalvar,:formCampanha"
+							id="excluir"
+							value="#{rotulo.excluir}"
+							action="#{campanhaMBean.excluirCampanha}"
+							ajax="false"
+							oncomplete="handleSalvarRequest(xhr, status, args)" readonly="#{campanhaMBean.campanhaSelecionada.insertionContracted == campanhaMBean.campanhaSelecionada.insertionReach }"/>
+
+						<p:commandButton
+						    update=":formSalvarCampanha:messageSalvar,:formCampanha"
+							value="#{rotulo.parar} #{rotulo.campanha}"
+							action="#{campanhaMBean.pararCampanha}"
+							id="pararCampanha"
+							ajax="false"
+							oncomplete="handleSalvarRequest(xhr, status, args)" readonly="#{campanhaMBean.campanhaSelecionada.insertionContracted == campanhaMBean.campanhaSelecionada.insertionReach }"/>
+							
+						<p:commandButton
+							type="reset"
+							value="#{rotulo.limpar}"
+							id="limpar" />
+					</h:panelGrid>
+				</div>
+			</h:form>
+		</p:dialog>
+		<script type="text/javascript">
+		
+		function showMdivulga(){
+			var e = document.getElementById("seleMDivulga");
+			
+			
+            
+			var trid03 = document.getElementById("TrMDivulga");
+		    if (!e.checked){
+		    	trid03.style.display = 'none';
+		    }else{
+		       
+		         trid03.style.display = 'block';
+		        
+		    }
+		}
+		
+			function handleSalvarRequest(xhr, status, args) {
+				if (args.validationFailed || !args.sucesso) {
+					jQuery('#modalSalvarCampanha').parent().effect("shake", {
+						times : 3
+					}, 100);
+				} else {
+					modalSalvarCampanha.hide();
+					labels();
+				}
+			}
+			
+			function isNumber(field) { 
+		        var re = /^[0-9]*$/; 
+		        if (!re.test(field.value)) { 
+		            alert('O valor do campo tem que ter só digitos. Non numéricos serão remividos do campo!'); 
+		            field.value = field.value.replace(/[^0-9]/g,""); 
+		        }
+            }
+            
+            function checkCheckbox(val, dia) {
+                if (val != '') {
+                    if (val != null) {
+	                    document.getElementById(dia).checked=true;
+                    }
+                }
+            }		    
+		</script>
+		<style type="text/css">
+
+		.semBorda tr, .semBorda td {  
+		    border: none !important;  
+		    
+		}
+
+		 
+		 .ui-widget-header{
+				border:1px solid #a8a8a8;
+				background:#c4c4c4 url("/MktCallWeb/javax.faces.resource/images/ui-bg_highlight-soft_100_c4c4c4_1x100.png.xhtml?ln=primefaces-aristo") 50% 50% repeat-x;
+				background:#c4c4c4 linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
+				background:#c4c4c4 -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));
+				background:#c4c4c4 -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
+				/*    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF);
+				-ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF)";
+				*/color:#333;
+				font-weight:bold;
+				text-shadow:0px 1px 0px rgba(255,255,255,0.7);
+				 text-align: center;
+}
+		</style>
+		 
+	</ui:define>
+
+</ui:composition>

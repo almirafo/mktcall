@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:head>
+	<meta
+		http-equiv="Content-Type"
+		content="text/html; charset=iso-8859-1" />
+	<title><h:outputText value="#{rotulo.title}" /></title>
+	<h:outputStylesheet
+		library="css"
+		name="style.css"></h:outputStylesheet>
+	<h:outputStylesheet
+		library="fancybox"
+		name="jquery.fancybox-1.3.4.css"></h:outputStylesheet>
+	<h:outputLink
+		rel="icon"
+		type="image/x-icon"
+		value="../resources/images/favicon.ico" />
+	<h:outputScript
+		library="js"
+		name="cufon-yui.js" />
+	<h:outputScript
+		library="fancybox"
+		name="jquery.fancybox-1.3.4.pack.js" />
+	<h:outputScript
+		library="js"
+		name="Officina.font.js"></h:outputScript>
+</h:head>
+<h:body>
+	<p:ajaxStatus
+		onstart="statusDialog.show();"
+		onsuccess="statusDialog.hide();" />
+
+	<p:dialog
+		modal="true"
+		widgetVar="statusDialog"
+		header="Status"
+		draggable="false"
+		closable="false"
+		resizable="false">
+		<p:graphicImage
+			library="images"
+			name="ajaxloadingbar.gif" />
+	</p:dialog>
+	<p:idleMonitor
+		timeout="1800000"
+		onidle="idleDialog.show();" />
+	<p:dialog
+		header="#{rotulo.estaAi}"
+		resizable="false"
+		closeListener="#{loginMBean.sessaoExpirada}"
+		widgetVar="idleDialog"
+		modal="true"
+		width="400">
+		<h:outputText value="#{rotulo.sessaoFechada}" />
+	</p:dialog>
+	<div id="wrapper">
+		<div id="header">
+			<div id="logo">
+				<h1>
+					<a href="#"> <h:graphicImage
+							library="images"
+							name="logo-vivo-purple.gif"
+							width="174"
+							height="71"
+							alt="#{rotulo.vivo}" />
+					</a>
+				</h1>
+			</div>
+			<div id="titulo">
+				<h2>
+					<h:outputText value="#{rotulo.chamadasPatrocinadas}" />
+				</h2>
+			</div>
+			<div
+				id="data"
+				style="top: 0px !important">
+				<h:form id="flags">
+					<h:panelGrid columns="3">
+						<h:commandLink action="#{languageController.englishLocale}">
+							<h:graphicImage
+								library="images"
+								name="United_Kingdom(Great_Britain).png" />
+						</h:commandLink>
+						<h:commandLink action="#{languageController.portugueseLocale}">
+							<h:graphicImage
+								library="images"
+								name="Brazil.png" />
+						</h:commandLink>
+						<h:commandLink action="#{languageController.spanishLocale}">
+							<h:graphicImage
+								library="images"
+								name="Spain.png" />
+						</h:commandLink>
+					</h:panelGrid>
+					<!-- <br />  -->
+				</h:form>
+				<h:outputText value="#{rotulo.usuario}: #{sessionScope['nomeLogin']}" />
+				<br />
+				<h:outputText value="#{rotulo.data}: #{loginMBean.dataAtual}" />
+				<br/>
+				<h:outputText value="#{rotulo.version}" />				
+			</div>
+		</div>
+		<div id="inside-content">
+			<ui:insert name="conteudo" />
+		</div>
+		<div id="footer">
+			<div id="footer-menu">
+				<ul>
+					<li><h:link
+							styleClass="pop-up"
+							outcome="seguranca">
+							<h:outputText value="#{rotulo.seguranca}" />
+						</h:link></li>
+					<li><h:link
+							styleClass="pop-up"
+							outcome="seguranca">
+							<h:outputText value="#{rotulo.politicaPrivacidade}" />
+						</h:link></li>
+					<li><h:link
+							styleClass="pop-up"
+							outcome="termos">
+							<h:outputText value="#{rotulo.termosServico}" />
+						</h:link></li>
+				</ul>
+			</div>
+			<div id="supportcomm">
+
+				<a href="http://www.supportcomm.com.br"> <h:graphicImage
+						library="images"
+						name="logo-supportcomm.gif"
+						alt="#{rotulo.supportComm}"
+						width="146"
+						height="30" />
+				</a>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		jQuery(document).ready(function() {
+			/*
+			 *   Examples - images
+			 */
+
+			jQuery(".pop-up").fancybox({
+				'width' : '6',
+				'height' : '4',
+				'autoScale' : false,
+				'transitionIn' : 'none',
+				'transitionOut' : 'none',
+				'type' : 'iframe',
+				'overlayColor' : '#000',
+				'overlayOpacity' : 0.8
+			});
+			jQuery("input[type='reset']").click(function() {
+				$("form").resetForm(); // uma função do plugin form
+				return false;
+			});
+			labels();
+		});
+
+		function moeda(z) {
+			v = z.value;
+			v = v.replace(/\D/g, "") // permite digitar apenas numero
+			v = v.replace(/(\d{1})(\d{14})$/, "$1.$2") // coloca ponto antes dos ultimos digitos
+			v = v.replace(/(\d{1})(\d{11})$/, "$1.$2") // coloca ponto antes dos ultimos 13 digitos
+			v = v.replace(/(\d{1})(\d{8})$/, "$1.$2") // coloca ponto antes dos ultimos 10 digitos
+			v = v.replace(/(\d{1})(\d{5})$/, "$1.$2") // coloca ponto antes dos ultimos 7 digitos
+			v = v.replace(/(\d{1})(\d{1,2})$/, "$1,$2") // coloca virgula antes dos ultimos 4 digitos
+			z.value = v;
+		}
+
+		function labels() {
+			Cufon.now();
+			Cufon.replace('h1');
+			Cufon.replace('h2');
+			Cufon.replace('h3');
+			Cufon.replace('#login-content #right-box label');
+			Cufon.replace('#primary-menu li', {
+				hover : true
+			});
+			Cufon.replace('#footer-menu li', {
+				hover : true
+			});
+		}
+
+		function soNums(z) {
+			v = z.value;
+			v = v.replace(/\D/g, "") // permite digitar apenas numero
+			z.value = v;
+		}
+	</script>
+</h:body>
+</html>

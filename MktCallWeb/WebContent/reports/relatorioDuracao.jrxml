@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Teste" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4a94ff6a-c5c9-4800-8cd6-318430aa0aa1">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="77"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<subDataset name="dataset1" uuid="341c852e-6c46-4af1-b3f8-56ade9e4b326"/>
+	<subDataset name="dataset2" uuid="b9df1faa-f6db-4c96-8a9f-5d46d531700f"/>
+	<parameter name="IMAGEM_BRASAO" class="java.lang.String"/>
+	<field name="nomeCampanha" class="java.lang.String"/>
+	<field name="dataRelatorioInicio" class="java.lang.String"/>
+	<field name="dataRelatorioFim" class="java.lang.String"/>
+	<field name="totalSegundos" class="java.lang.Double"/>
+	<field name="media" class="java.math.BigDecimal"/>
+	<field name="quantidade" class="java.lang.String"/>
+	<group name="Group1">
+		<groupExpression><![CDATA[(int)($V{REPORT_COUNT}/15)]]></groupExpression>
+		<groupHeader>
+			<band height="40">
+				<textField>
+					<reportElement uuid="aeaa94d3-7559-4cf7-b067-e947dd0820a0" style="Detail" x="0" y="25" width="225" height="15"/>
+					<textElement textAlignment="Center">
+						<font size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Nome da Campanha"]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="aeaa94d3-7559-4cf7-b067-e947dd0820a0" style="Detail" x="318" y="25" width="115" height="15"/>
+					<textElement textAlignment="Center">
+						<font size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Duração em Minutos"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="cb7cf967-e7ec-48f6-bc9a-019161f7cabc" style="Detail" x="225" y="25" width="93" height="15"/>
+					<textElement textAlignment="Center">
+						<font size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Quantidade"]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="e1e3d1f5-7525-4310-8d0d-9f4f29a6eccb" style="Detail" x="433" y="25" width="120" height="15"/>
+					<textElement textAlignment="Center">
+						<font size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Média em segundos"]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="6"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="70" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="26429e50-0870-4bf2-9731-852163dd826e" style="Title" x="0" y="13" width="287" height="33" forecolor="#990099"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Chamada Patrocinada]]></text>
+			</staticText>
+			<image>
+				<reportElement uuid="9b8b6fac-30c0-4603-8344-07232030b184" isPrintRepeatedValues="false" x="365" y="0" width="190" height="70"/>
+				<imageExpression><![CDATA[$P{IMAGEM_BRASAO}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<line>
+				<reportElement uuid="dae2b5c0-9b9e-4e48-b342-21e234e9bd39" positionType="FixRelativeToBottom" x="0" y="35" width="555" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement uuid="1524f5bd-f995-443c-9ab1-2a6f32456e4a" style="SubTitle" x="51" y="11" width="314" height="24" forecolor="#990099"/>
+				<textElement>
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Relatório de Duração"]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement uuid="5c18b292-c4e0-4b3d-a2a9-e6475ee2d391" mode="Opaque" x="0" y="11" width="36" height="24" forecolor="#CCCCCC" backcolor="#CCCCCC"/>
+			</rectangle>
+			<textField>
+				<reportElement uuid="868005a8-e3b4-4250-9844-7980e6a61ce5" x="403" y="19" width="59" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dataRelatorioInicio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="82cb2505-1cf0-4b77-8cd5-9331b6b36117" x="486" y="19" width="67" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dataRelatorioFim}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="b385a4e2-ab08-479b-8c8e-9bef7fc0849a" x="373" y="19" width="30" height="16"/>
+				<textElement/>
+				<text><![CDATA[De:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="997e1aed-9462-4bce-9793-d1ee7dde64e6" x="462" y="19" width="24" height="16"/>
+				<textElement/>
+				<text><![CDATA[Até:]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="27" splitType="Stretch">
+			<line>
+				<reportElement uuid="87f1dfde-a5fa-4cad-8ac9-490573844f05" positionType="FixRelativeToBottom" x="-2" y="0" width="555" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="ea782a6f-ae14-434c-aa02-1a144db245c5" x="0" y="1" width="225" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{nomeCampanha}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement uuid="df0ab81d-b949-438c-8209-165ad9573a6c" x="318" y="1" width="115" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[( $F{totalSegundos}==null ? "" : $F{totalSegundos}/60 )]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="c79f2b9c-fef2-42af-9bcc-4b5485f6f874" x="225" y="1" width="93" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{quantidade}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement uuid="4d010a6f-cc90-4350-9128-c2fb49662a25" x="433" y="0" width="120" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[( $F{media}==null ? "" : $F{media} )]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch">
+			<line>
+				<reportElement uuid="81f8e46d-2be6-4bb2-aef5-3dc3dd0aab04" positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="8c6942d3-bc78-40b1-bea8-d0e74ba8dbc3" style="Column header" x="433" y="0" width="80" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="db17a571-d7d8-4fa0-b15b-ace891d762af" style="Column header" x="513" y="0" width="40" height="20"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement uuid="14f95b2d-1596-4480-a47b-0cb334cfefbb" style="Column header" x="0" y="0" width="197" height="20"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

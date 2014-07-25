@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf13467933829460" configfile="/MktCallWeb/WebContent/WEB-INF/faces-config.xml">
+  <nodes xsi:type="pageflow:PFPage" name="*" x="24" y="36" id="pf13494517510590" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf134970158617343 pf134970158617344 pf134970158617345 pf134970158617346 pf134970158617347 pf134970158617348 pf134970158617349 pf134970158617350 pf134970158617351 pf134970158617352 pf134970158617353" path="*"/>
+  <nodes xsi:type="pageflow:PFPage" name="index.xhtml" id="pf134970158617354" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" inlinks="pf134970158617343" path="/index.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="paginas/usuario.xhtml" id="pf134970158617355" referenceLink="//@navigationRule.0/@navigationCase.1/@toViewId|" inlinks="pf134970158617344" path="/paginas/usuario.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="paginas/termos.xhtml" id="pf134970158617356" referenceLink="//@navigationRule.0/@navigationCase.2/@toViewId|" inlinks="pf134970158617345" path="/paginas/termos.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="paginas/spot.xhtml" id="pf134970158617357" referenceLink="//@navigationRule.0/@navigationCase.3/@toViewId|" inlinks="pf134970158617346" path="/paginas/spot.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="paginas/seguranca.xhtml" id="pf134970158617358" referenceLink="//@navigationRule.0/@navigationCase.4/@toViewId|" inlinks="pf134970158617347" path="/paginas/seguranca.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="paginas/relatorios.xhtml" id="pf134970158617359" referenceLink="//@navigationRule.0/@navigationCase.5/@toViewId|" inlinks="pf134970158617348" path="/paginas/relatorios.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="paginas/listaFidelizada.xhtml" id="pf134970158617360" referenceLink="//@navigationRule.0/@navigationCase.6/@toViewId|" inlinks="pf134970158617349" path="/paginas/listaFidelizada.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="paginas/graficos.xhtml" id="pf134970158617361" referenceLink="//@navigationRule.0/@navigationCase.7/@toViewId|" inlinks="pf134970158617350" path="/paginas/graficos.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="paginas/campanha.xhtml" id="pf134970158617362" referenceLink="//@navigationRule.0/@navigationCase.8/@toViewId|" inlinks="pf134970158617351" path="/paginas/campanha.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="paginas/anunciante.xhtml" id="pf134970158617363" referenceLink="//@navigationRule.0/@navigationCase.9/@toViewId|" inlinks="pf134970158617352" path="/paginas/anunciante.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="paginas/agencia.xhtml" id="pf134970158617364" referenceLink="//@navigationRule.0/@navigationCase.10/@toViewId|" inlinks="pf134970158617353" path="/paginas/agencia.xhtml"/>
+  <links id="pf134970158617343" target="pf134970158617354" source="pf13494517510590" outcome="inicio"/>
+  <links id="pf134970158617344" target="pf134970158617355" source="pf13494517510590" outcome="usuario"/>
+  <links id="pf134970158617345" target="pf134970158617356" source="pf13494517510590" outcome="termos"/>
+  <links id="pf134970158617346" target="pf134970158617357" source="pf13494517510590" outcome="spot"/>
+  <links id="pf134970158617347" target="pf134970158617358" source="pf13494517510590" outcome="seguranca"/>
+  <links id="pf134970158617348" target="pf134970158617359" source="pf13494517510590" outcome="relatorios"/>
+  <links id="pf134970158617349" target="pf134970158617360" source="pf13494517510590" outcome="listaFidelizada"/>
+  <links id="pf134970158617350" target="pf134970158617361" source="pf13494517510590" outcome="graficos"/>
+  <links id="pf134970158617351" target="pf134970158617362" source="pf13494517510590" outcome="campanha"/>
+  <links id="pf134970158617352" target="pf134970158617363" source="pf13494517510590" outcome="anunciante"/>
+  <links id="pf134970158617353" target="pf134970158617364" source="pf13494517510590" outcome="agencia"/>
+</pageflow:Pageflow>
