@@ -58,7 +58,7 @@ img {
 }
 
 #wrapper #header #logo h1 a {
-	background: url(../images/logo-vivo-purple.gif) no-repeat 0 0;
+	background: url(../images/claro.gif) no-repeat 0 0;
 	width: 174px;
 	height: 71px;
 	display: block;
@@ -273,7 +273,7 @@ img {
 }
 
 #primary-menu ul li.active a,#primary-menu ul li a:hover {
-	color: #652d91;
+	color: #ed3b17;
 }
 
 /*Secondary-menu*/
@@ -350,7 +350,7 @@ img {
 }
 
 #secondary-menu ul li ul li a:hover {
-	color: #b27adf;
+	color: #ed3b17;
 }
 
 #secondary-menu-busca {
