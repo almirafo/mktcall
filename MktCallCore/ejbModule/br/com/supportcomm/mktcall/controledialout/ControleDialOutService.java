@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 
 import br.com.supportcomm.mktcall.entity.Campanha;
 import br.com.supportcomm.mktcall.impl.controledialout.ControleDialOutBeanLocal;
+import br.com.supportcomm.mktcall.impl.listdetail.ListDetailBeanLocal;
 import br.com.supportcomm.mktcall.vo.ListaCampanhaDialOutVO;
 
 /**
@@ -18,6 +19,7 @@ import br.com.supportcomm.mktcall.vo.ListaCampanhaDialOutVO;
 public class ControleDialOutService {
 
 	@EJB private ControleDialOutBeanLocal controleDialOutBean;
+	@EJB private ListDetailBeanLocal listDetailBean;
 	
     /**
      * Default constructor. 
@@ -39,6 +41,7 @@ public class ControleDialOutService {
 
 	public void insertListOfMsisdnByCampanha(Campanha campanha) {
 		controleDialOutBean.insertListOfMsisdnByCampanha(campanha);
+		listDetailBean.blockListOfMsisdnByCampanha(campanha);
 		
 	}
 }

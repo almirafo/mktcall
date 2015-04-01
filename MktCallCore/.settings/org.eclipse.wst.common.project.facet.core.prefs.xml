@@ -8,7 +8,7 @@
     </node>
     <node name="schemas">
       <node name="schema-1">
-        <attribute name="location" value="platform:/resource/MktCallCore/ejbModule/br/com/supportcomm/freecall/xml/status/advertisement/Advertisement.xsd"/>
+        <attribute name="location" value="platform:/resource/MktCallCore/ejbModule/br/com/supportcomm/mktcall/xml/status/advertisement/Advertisement.xsd"/>
       </node>
     </node>
   </facet>

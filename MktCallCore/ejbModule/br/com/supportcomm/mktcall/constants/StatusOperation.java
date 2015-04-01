@@ -12,6 +12,7 @@ public enum StatusOperation
     // Declaração das constantes
     OK(0, "Successful"),
     MISSING_MSISDN(1, "Missing msisdn parameter"),
+    MISSING_LISTID(1, "Missing List Id"),
     MISSING_CALLID(2, "Missing callid parameter"),
     MISSING_AREACODE(23, "Missing region"),
     MISSING_CFUCODE(3, "Missing cfucode parameter"),
@@ -28,6 +29,7 @@ public enum StatusOperation
     MISSING_LISTENCOMPLETEAD(20, "Missing Listen Completead"),
     MISSING_DIAL_STATUS(21, "Missing Dial Status"),
     MISSING_WHITE_LIST(22, "Missing White List"),
+    MISSING_IDCAMPANHA(23, "Missing idcampanha"),
     
     
     NO_CAMPAIGN_AVAILABLE(5, "No more campaign available or without promotional minutes"),
@@ -58,7 +60,10 @@ public enum StatusOperation
     METHOD_POST_ERROR(252, "Method POST not supported. Use GET method instead"),
     METHOD_GET_ERROR(253, "Method GET not supported. Use POST method instead"),
     INTERNAL_ERROR(254, "Internal error"),
-    OPERATION_PENDING(255, "Operation pending");
+    OPERATION_PENDING(255, "Operation pending"),
+    BLACKLIST_SOURCE_MANUAL(1,"Manual"),
+	BLACKLIST_SOURCE_APP(2,"App"),
+	BLACKLIST_SOURCE_SCRIPT(3,"script");
     
     
     

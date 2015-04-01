@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import br.com.supportcomm.mktcall.constants.StatusOperation;
 import br.com.supportcomm.mktcall.entity.Campanha;
 import br.com.supportcomm.mktcall.entity.Cdr;
 import br.com.supportcomm.mktcall.entity.ControlFlow;
@@ -25,14 +26,15 @@ import br.com.supportcomm.mktcall.entity.MsisdnCampanha;
 import br.com.supportcomm.mktcall.entity.SpotAudioFile;
 import br.com.supportcomm.mktcall.entity.SpotResponse;
 import br.com.supportcomm.mktcall.entity.Statistic;
-import br.com.supportcomm.mktcall.constants.StatusOperation;
 import br.com.supportcomm.mktcall.service.campanha.CampanhaService;
 import br.com.supportcomm.mktcall.service.cdr.CdrService;
+import br.com.supportcomm.mktcall.service.config.ConfigService;
 import br.com.supportcomm.mktcall.service.controlflow.ControlFlowService;
 import br.com.supportcomm.mktcall.service.lastcallmsisdn.LastCallMsisdnService;
 import br.com.supportcomm.mktcall.service.msisdncampanha.MsisdnCampanhaService;
 import br.com.supportcomm.mktcall.service.spot.SpotService;
 import br.com.supportcomm.mktcall.service.statistic.StatsService;
+import br.com.supportcomm.mktcall.util.SendSMS;
 
 /**
  * Servlet implementation class EndSessionServlet
@@ -66,6 +68,9 @@ public class EndSessionServlet extends HttpServlet {
 	@EJB 
 	private ControlFlowService controlFlowService;
 
+	
+	@EJB
+	private ConfigService configService;
 	public EndSessionServlet() {
 		super();
 	}
@@ -190,9 +195,9 @@ public class EndSessionServlet extends HttpServlet {
 							insereEmEstatistica(msisdn, listencompleted, cdr,campanha); // Dados para inserir informção tabela Statistic
 							
 							setRollBackReach(listencompleted, campanha); // decrementa insertionReach da campanha. caso listencompleted= false
-							ControlFlow controlFlow = new ControlFlow();
-							controlFlow.setCallid(callid);
-							removeControlFlow(controlFlow,listencompleted);
+							//ControlFlow controlFlow = new ControlFlow();
+							//controlFlow.setCallid(callid);
+							//removeControlFlow(controlFlow,listencompleted);
 							LastCallMsisdn  lastcallmsisdn=  new LastCallMsisdn();
 							lastcallmsisdn =lastCallMsisdnService.getStatisticByIdMsisdn(msisdn);
 							if(lastcallmsisdn.getIdlastcallmsisdn()==null){
@@ -219,7 +224,10 @@ public class EndSessionServlet extends HttpServlet {
 				logger.error(e);
 			}
 		}
-
+		
+		
+		//envioDeSMS(msisdn);
+		
 		response.setContentType("text/xml;charset=UTF-8");
 		response.setHeader("Cache-Control", "no-cache");
 
@@ -246,6 +254,23 @@ public class EndSessionServlet extends HttpServlet {
 		xml.append("</response>");
 		response.getWriter().write(xml.toString());
 		
+	}
+
+	private void envioDeSMS(String msisdn) {
+		String remitterMsg = configService.getValueByIndentify("remitterMsg");
+		String proxysms    = configService.getValueByIndentify("proxysms");
+		String portsms     = configService.getValueByIndentify("portsms");
+		boolean activeSMS  = Boolean.parseBoolean( configService.getValueByIndentify("activeSMS"));
+		if (activeSMS){
+			logger.info("informar mensagem de entrega de voz ");
+			SendSMS sendSMS = new SendSMS();
+			logger.info("SMS Destination:" +msisdn);
+			try {
+				sendSMS.execute(msisdn, remitterMsg,proxysms,portsms);
+			} catch (Exception e) {
+				logger.error("SMS Destination:" + msisdn + e.getMessage());
+			}
+		}
 	}
 
 	private void removeControlFlow(ControlFlow controlFlow, String listencompleted) {
