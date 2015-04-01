@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import br.com.supportcomm.mktcall.entity.ListDetail;
 import br.com.supportcomm.mktcall.log.LogMktCall;
+import br.com.supportcomm.mktcall.service.config.ConfigService;
 import br.com.supportcomm.mktcall.service.listdetail.ListDetailService;
 import br.com.supportcomm.mktcall.service.listsegment.ListSegmentService;
 import br.com.supportcomm.mktcall.tools.FilesUtil;
@@ -27,6 +28,7 @@ public class TimerService extends AbstractManagedBean{
 	
 	@EJB private ListSegmentService listSegmentService;
 	@EJB private ListDetailService listDetailService;
+	@EJB private ConfigService configService;
 	private static synchronized boolean mudaExec(boolean val) {
 		if (val == emExec) {
 			return false;
@@ -50,7 +52,7 @@ public class TimerService extends AbstractManagedBean{
 		
 		try {
 			LogMktCall.log(Level.DEBUG, "Timer List Segment Ini");
-			   String path =  "/users/portais/4040/Arquivos/";//super.getMessage("localArquivoSegmentado");
+			   String path =   configService.getValueByIndentify("localArquivoSegmentado");
 			   ListDetail listDetail = listDetailService.findListDetailProcessing();
 			   
 			   if(listDetail==null){

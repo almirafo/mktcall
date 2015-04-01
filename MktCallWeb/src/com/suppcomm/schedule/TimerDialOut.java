@@ -2,7 +2,11 @@ package com.suppcomm.schedule;
 
 import java.net.URLEncoder;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -17,10 +21,13 @@ import org.apache.log4j.Logger;
 import br.com.supportcomm.dialout.util.Dialout;
 import br.com.supportcomm.mktcall.constants.StatusOperation;
 import br.com.supportcomm.mktcall.constants.StatusProcessing;
+import br.com.supportcomm.mktcall.entity.Campanha;
 import br.com.supportcomm.mktcall.entity.Dialing;
+import br.com.supportcomm.mktcall.entity.Insertion;
 import br.com.supportcomm.mktcall.service.campanha.CampanhaService;
 import br.com.supportcomm.mktcall.service.dialing.ConfigDelegate;
 import br.com.supportcomm.mktcall.service.dialing.DialingDelegate;
+import br.com.supportcomm.mktcall.service.insertion.InsertionService;
 import br.com.supportcomm.mktcall.tools.SCTools;
 import br.com.supportcomm.mktcall.util.JSFUtil;
 import br.com.supportcomm.mktcall.util.SendSMS;
@@ -41,6 +48,9 @@ public class TimerDialOut {
     
     @EJB
     private CampanhaService campanhaService;
+    
+    @EJB 
+    private InsertionService insertionService;
     
     
     @Context ServletContext servletContext;
@@ -101,6 +111,8 @@ public class TimerDialOut {
 		    	Integer priority         = Integer.parseInt( configDelegate.getValueByIndentify("priority"));
 		    	Integer maxResults       = Integer.parseInt( configDelegate.getValueByIndentify("maxResults"));
 		    	Integer timoutDelayMinutes= Integer.parseInt( configDelegate.getValueByIndentify("timoutDelayMinutes"));
+		    	String laNumber=configDelegate.getValueByIndentify("laNumber");
+		    	
 		    	
 		    	String proxysms=configDelegate.getValueByIndentify("proxysms")==null?"":configDelegate.getValueByIndentify("proxysms");
 		    	String portsms =configDelegate.getValueByIndentify("portsms")==null?"":configDelegate.getValueByIndentify("portsms");
@@ -115,12 +127,21 @@ public class TimerDialOut {
 		    	for (Dialing dialing:dialings){
 		    		
 		    		// tocar preciso verifiar se tem minutos promocionais para esse numero
-		    		if( campanhaService.verificaSeTemCampanha(dialing.getIdList().getIdList())){
-			    		Channel channel = new Channel();
-			    		channel.setIdDialing(dialing.getId());
-			    		channel.setMsisdn(dialing.getMsisdnDialing());
-			    		channels.add(channel);
-		    		}
+		    		//if( campanhaService.verificaSeTemCampanha(dialing.getIdList().getIdList())){
+		    			
+		    			// verifica se tem schedule para essa campanha.
+		    			Campanha campanha =  campanhaService.getCampanhaId(dialing.getIdCampanha().getIdCampanha()).get(0);
+		    			Campanha cf=  getCampanhaFiltro(campanha, new Timestamp(System.currentTimeMillis()));
+		    			if (cf!=null){
+				    		Channel channel = new Channel();
+				    		channel.setIdDialing(dialing.getId());
+				    		channel.setMsisdn(dialing.getMsisdnDialing());
+				    		channel.setIdCampanha( String.valueOf(dialing.getIdCampanha().getIdCampanha()));
+				    		channel.setMsisdnOriginator(laNumber);
+				    		channels.add(channel);
+				    		
+		    			}
+		    		//}
 		    	}
 		    	
 		    	List<Dialout> dialouts = new ArrayList<Dialout>();
@@ -130,20 +151,25 @@ public class TimerDialOut {
 		    		variables.add( startLuaCondition+"="+exter );
 		    		
 		    		variables.add("destinationNumber=".concat(chanel.getMsisdn()));			
-		    				
+		    		variables.add("idCampanha=".concat(chanel.getIdCampanha()));
+		    		
+		    		
 		    		Dialout dialout = new Dialout();
 		    		
 		    	  	dialout.setCallerId(chanel.getMsisdnOriginator());
-		    	  	if(!chanel.getMsisdn().contains("192.")){
+		    	  	if(!chanel.getMsisdn().contains("192")){
 		    	  		dialout.setChannel(channelPrefix.concat(chanel.getMsisdn().concat(channelSuffix) ));
+		    	  		dialout.setMsisdnOriginator(chanel.getMsisdn());
 		    	  	}else{
 		    	  		dialout.setChannel( channelPrefix.replace("0", "").concat(chanel.getMsisdn()));
 		    	  	}
 		    	  	
 		        	dialout.setContext(context);
 		        	dialout.setExten(exter);
+
 		        	dialout.setIpConnection(ipConnection);
-		            dialout.setLoginAsterisk(loginAsterisk);
+
+		        	dialout.setLoginAsterisk(loginAsterisk);
 		        	dialout.setPassAsterisk(passAsterisk);
 		        	dialout.setPriority(priority);
 		        	dialout.setTimeout(Long.parseLong( timeout));
@@ -175,9 +201,9 @@ public class TimerDialOut {
 		        			
 		        			if(dialout.getResponseCode().equalsIgnoreCase(String.valueOf( StatusProcessing.SUCCESS.value()))){
 		        				logger.info("informar a base que a ligação foi entregue ");
-		        				//SendSMS sendSMS = new SendSMS();
+		        				SendSMS sendSMS = new SendSMS();
 		        				logger.info("SMS Originator:" +dialout.getMsisdnOriginator());
-		        				//sendSMS.execute(dialout.getMsisdnOriginator(), remitterMsg,proxysms,portsms);
+		        				sendSMS.execute(dialout.getMsisdnOriginator(), laNumber, remitterMsg,proxysms,portsms);
 		        				
 		        				Channel channel = (Channel) dialout.getObject();
 		        				
@@ -208,18 +234,18 @@ public class TimerDialOut {
 			                        
 			                        dialing.setDatetimeScheduled(SCTools.calculateDelayedTimestamp(timoutDelayMinutes, timeRangeStartHour, timeRangeEndHour));
 			                        
-			                        if (dialing.getAttempts()>maxAtemps){
-			                        	dialing.setAction("SMS");
-			                        	dialing.setStatus(StatusOperation.OK.value());
-			                        	SendSMS sendSMS = new SendSMS();
+			                        //if (dialing.getAttempts()>maxAtemps){
+			                        	//dialing.setAction("SMS");
+			                        	//dialing.setStatus(StatusOperation.OK.value());
+			                        	//SendSMS sendSMS = new SendSMS();
 				        				
 				        				//sendSMS.execute( ((Channel) dialout.getObject()).getMsisdn() , addresseeMsg,proxysms,portsms);
 				        				
 				        				//sendSMS.execute(dialout.getMsisdnOriginator(), noticeCallerSMS,proxysms,portsms);
 				        				
 				        				
-			                        	logger.info("Enviar SMS Destino e Remetente");
-			                        }
+			                        	//logger.info("Enviar SMS Destino e Remetente");
+			                        //}
 			                        dialingDelegate.update(dialing);
 		        				}
 		        			}
@@ -260,6 +286,7 @@ public class TimerDialOut {
 		 private String msisdn;
 		 private String msisdnOriginator;
 		 private Long idDialing;
+		 private String idCampanha;
 		public String getMsisdn() {
 			return msisdn;
 		}
@@ -278,9 +305,116 @@ public class TimerDialOut {
 		public void setMsisdnOriginator(String msisdnOriginator) {
 			this.msisdnOriginator = msisdnOriginator;
 		}
+		public String getIdCampanha() {
+			return idCampanha;
+		}
+		public void setIdCampanha(String idCampanha) {
+			this.idCampanha = idCampanha;
+		}
+
 			
 	 }
 	
 
+	 
+		private Campanha getCampanhaFiltro(Campanha campanha, Timestamp dataHoje) throws ParseException {
+			List<Insertion> insertionList;
+			long campanhaTocada=0; 
+			
+			List<Campanha> campanhasComSchedules = new ArrayList<>();
+			List<Campanha> campanhasSemSchedules = new ArrayList<>();
+			
+				//somento os ativos
+				if (campanha.getStatus() == 1) {
+					SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");  
+					String startTime =  campanha.getStartDatatime().toString().substring(0, 11) + "00:00:00";
+					String endTime   =  campanha.getEndDatetime().toString().substring(0, 11) + "23:59:59";
+					Timestamp stamp = new Timestamp(System.currentTimeMillis());
+					Date hoje = new Date(dataHoje.getTime());
+					
+					Date startDate = formato.parse(startTime);
+					Date endDate   = formato.parse(endTime);
+
+					
+					if(endDate.compareTo(hoje)>=0  &&	startDate.compareTo(hoje)<=0)
+					 {
+						
+							//if (campanha.getInsertionReach() <= campanha.getInsertionContracted()) {
+								insertionList = insertionService.getInsertionCampanha(campanha.getIdCampanha());
+								campanha.setInsertions(insertionList);
+								if (!campanha.getInsertions().isEmpty()) {
+									if(campanhaTocada!=campanha.getIdCampanha()){
+										if (verifyDay(campanha)) {
+											campanhasComSchedules.add(campanha);
+										}
+									}
+								}else{
+									campanhasSemSchedules.add(campanha);
+								}
+							//}
+						
+					}
+				}
+
+
+			if (!campanhasComSchedules.isEmpty()){
+				campanha=campanhasComSchedules.get(0);
+			}else{
+				if (!campanhasSemSchedules.isEmpty()){
+					campanha=campanhasSemSchedules.get(0);
+				}
+			}
+			
+			return campanha;
+			
+		}
+	 
+
+		private boolean verifyDay(Campanha campanha) {
+
+			Timestamp dataDeHoje = new Timestamp(System.currentTimeMillis());
+			
+			boolean dayOK = false;
+			Calendar now = Calendar.getInstance();
+			now.setTime(dataDeHoje);
+			int diaDaSemana =now.get(Calendar.DAY_OF_WEEK);
+			if (campanha.getInsertions().isEmpty()){
+				dayOK = true;
+			}
+			
+			for (Insertion insertion : campanha.getInsertions()) {
+
+				if (insertion.getDayOfWeek() == diaDaSemana ) {
+					
+					insertion.getStartTime().toString();
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					String startTime;
+					String endTime;
+					String horaDeHoje; 
+					startTime =  dataDeHoje.toString().substring(0, 11) + insertion.getStartTime().toString().substring(11,16)+":00";
+					endTime   =  dataDeHoje.toString().substring(0, 11) + insertion.getEndTime().toString().substring(11,16)+":00";
+					horaDeHoje = dataDeHoje.toString();
+					;
+					try {
+						if (sdf.parse(startTime).equals(sdf.parse(horaDeHoje) ) ||sdf.parse(startTime).before(sdf.parse(horaDeHoje))) {
+							if (sdf.parse(endTime).equals(sdf.parse(horaDeHoje) ) ||sdf.parse(endTime).after(sdf.parse(horaDeHoje))) {
+								dayOK = true;
+							}
+						
+						}
+					} catch (ParseException e) {
+						logger.warn("Método verifyDay - Parse Exception - message: " + e.getMessage());
+						e.printStackTrace();
+					}
+				}
+
+			}
+			return dayOK;
+
+		}
+		
+		
+	 
+	 
 }
 

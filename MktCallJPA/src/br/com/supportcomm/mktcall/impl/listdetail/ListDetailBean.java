@@ -6,7 +6,9 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import br.com.supportcomm.mktcall.entity.Campanha;
 import br.com.supportcomm.mktcall.entity.ListDetail;
+import br.com.supportcomm.mktcall.enums.ProcessStatus;
 
 
 /**
@@ -97,5 +99,28 @@ public class ListDetailBean
 		return listDetail;
 	}
     
+	@Override
+	public void blockListOfMsisdnByCampanha(Campanha campanha) {
+		
+		String sqlString = 
+				"UPDATE list_segmentation " +
+				" set block = 1 " +
+				"FROM  blacklist left join list_segmentation ls on (blacklist.msisdn = ls .msisdn) " +
+				"WHERE list_segmentation.id_list in ( select id_list from campanha where id_campanha = :idcampanha) ";
+		
+		sqlString ="UPDATE list_segmentation  " +
+		" set block = 1 " +
+		"WHERE list_segmentation.msisdn  in ( select msisdn from blacklist where  msisdn = list_segmentation.msisdn) " +
+		"and id_list in (select id_list from campanha where campanha.id_campanha = :idcampanha) "  ;
+
+		
+		em.createNativeQuery(sqlString)
+		   .setParameter("idcampanha", campanha.getIdCampanha())
+		   .executeUpdate();
+		
+		
+		
+		
+	}
 
 }

@@ -8,7 +8,7 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	template="/paginas/template.xhtml">
 	<ui:define name="conteudo">
-		<h:form id="formListaSegmentada">
+		<h:form id="formListaSegmentada" >
 			<f:event
 				type="preRenderComponent"
 				listener="#{listaSegmentadaMBean.permiteAcesso}" />
@@ -138,45 +138,78 @@
 			</div>
 
 		</h:form>
-		
-		<h:form id="formFileUpload">
-		    <div id="round-border">
-				<h:panelGrid id="panel" columns="2" border="1" cellpadding="0" cellspacing="2">
-		        <f:facet name="header">
-		            <h:outputText value="#{rotulo.carregarLista}"/>
-		        </f:facet>
-		        <h:outputLabel for="NomeDaLista" value="#{rotulo.nomeDaLista}" />
-		        <h:inputText id="NomeDaLista" maxlength="32" size="25" value="#{listaSegmentadaMBean.segmentName}" />
-		        <h:outputLabel for="listaArquivos2" value="#{rotulo.arquivosDisponiveis}" />
-		        <p:selectOneMenu
-								size="2"
-								id="listaArquivos" 
-								required="true"
-								requiredMessage="#{rotulo.campoObrigatorio}"
-								value="#{listaSegmentadaMBean.fileName}">
-								<f:selectItem
-									itemLabel="#{rotulo.selecione}"
-									itemValue="0" />
-								<f:selectItems value="#{listaSegmentadaMBean.listaArquivos()}" />
-							</p:selectOneMenu>
-		        <f:facet name="footer">
-		            <h:panelGroup style="display:block; text-align:center">
-		                <p:commandButton
-								actionListener="#{listaSegmentadaMBean.processarArquivo}"
-								update=":formExclusao:acao  :formFileUpload:listaArquivos :formListaSegmentada:listDetail"
-								oncomplete="excluirComplete.show()"
-								value="#{rotulo.processarArquivo}" >
-								
-								</p:commandButton>
-		            </h:panelGroup>
-		        </f:facet>
-	        </h:panelGrid>	
-		    </div>
+				
+
+							
+		<h:form id="formFileUpload" enctype="multipart/form-data" >
+		    	<table  border="0" cellpadding="0" cellspacing="2" width="600px">
+				<tr>
+		          <td>
+		            <h:outputText value="#{rotulo.carregarLista}"/> :
+		                    <p:selectOneRadio id="origem" onchange="mudaEscolha(this)" value="#{listaSegmentadaMBean.origem}" >
+					            <f:selectItem itemLabel="Do Servidor" itemValue="1" />
+					            <f:selectItem itemLabel="Da sua Máquina" itemValue="2" />
+					        </p:selectOneRadio>
+		           </td>
+		        </tr>
+		        
+		        <tr>
+			        <td><h:outputLabel for="NomeDaLista" value="#{rotulo.nomeDaLista}" />:
+			            <h:inputText id="NomeDaLista" maxlength="32" size="25" value="#{listaSegmentadaMBean.segmentName}" /></td>
+		        </tr>
+		        
+		        <tr id="s1" style="display:block; width: 600px" >
+			        <td width="100%">Carregar a partir do servidor: 
+			        <p:selectOneMenu
+									size="2"
+									id="listaArquivos" 
+									required="true"
+									
+									
+									requiredMessage="#{rotulo.campoObrigatorio}"
+									value="#{listaSegmentadaMBean.fileName}">
+									<f:selectItem
+										itemLabel="#{rotulo.selecione}"
+										itemValue="0" />
+									<f:selectItems value="#{listaSegmentadaMBean.listaArquivos()}" />
+								</p:selectOneMenu>
+					</td>
+				</tr>
+				
+				<tr id="l2" style="display:none">
+					<td>Carregar a partir de sua estação:
+					    <p:fileUpload id="fup" value="#{listaSegmentadaMBean.fup}" label="#{rotulo.nomeDaLista}"
+					                   cancelLabel="Cancelar"
+					                   uploadLabel="Carregar"
+			                    fileUploadListener="#{listaSegmentadaMBean.processarArquivoLocal}" 
+			                    showButtons="true" 
+			                    mode="advanced"
+			                    oncomplete="fileUploadComplete.show()"
+			                    update=":formUploadComplete:acao"
+			                    auto="flase" sizeLimit="5000000"   
+			                          fileLimit="1"
+			                          fileLimitMessage="somente um arquivo por vez"
+			                          allowTypes="/(\.|\/)(csv)$/"
+			                          />  
+				   </td>
+			   </tr>
+			   
+		        <tr  id="bt01" style="display:block">
+			        <td>
+			        
+			                <p:commandButton
+									actionListener="#{listaSegmentadaMBean.processarArquivo}"
+									update=":formUploadComplete:acao  :formFileUpload:listaArquivos :formListaSegmentada:listDetail"
+									oncomplete="fileUploadComplete.show()"
+									value="#{rotulo.processarArquivo}" >
+							</p:commandButton>
+					</td>
+				</tr>
+
+	        </table>
+		    
 		</h:form>
-		
-		
-		
-			<p:dialog
+		<p:dialog
 			widgetVar="modalSalvarListaSegmentada"
 			modal="true"
 			width="450"
@@ -236,15 +269,24 @@
 		
 		
 		<p:dialog    widgetVar="fileUploadComplete" modal="true" >
-		<h:form id="formUploadComplete">
-			<h:panelGrid columns="1" border="0" >
-			    <p:outputLabel id="acao" value="#{listaSegmentadaMBean.acao}"/>
-			    <p:commandButton value="ok" onclick="fileUploadComplete.hide()"/>
-		    </h:panelGrid>
-		</h:form>    
+			<h:form id="formUploadComplete">
+				<h:panelGrid columns="1" border="0" >
+				    <p:outputLabel id="acao" value="#{listaSegmentadaMBean.acao}"/>
+				    <p:commandButton value="ok" onclick="fileUploadComplete.hide()"  update=":formListaSegmentada:listDetail"/>
+			    </h:panelGrid>
+			</h:form>    
 		</p:dialog>
 
 
+
+		<p:dialog    widgetVar="confirmationUploadDialog" modal="true" >
+		<h:form id="formUploadConfirmation">
+			<h:panelGrid columns="1" border="0" >
+			    <p:outputLabel id="acao" value="#{listaSegmentadaMBean.acao}"/>
+			    <p:commandButton value="ok" onclick="confirmationUploadDialog.hide()"/>
+		    </h:panelGrid>
+		</h:form>    
+		</p:dialog>
 
 		
 		
@@ -274,5 +316,38 @@
 			    <p:commandButton value="OK" update=":formListaSegmentada:listDetail"  oncomplete="modalOk.hide();"/>
 			</form>
 		</p:dialog>
+		
+		
+		
+		<p:dialog    widgetVar="modalOk2" modal="true" >
+			<form id="formOk">
+			    <p:commandButton value="Campo não pode ser vazio" update=":formListaSegmentada:listDetail"  oncomplete="modalOk2.hide();"/>
+			</form>
+		</p:dialog>
+		
+		<script type="text/javascript">
+
+				function mudaEscolha(obj){
+					if (obj.value=="1"){
+						s1.style.display = 'block';
+						l2.style.display = 'none';
+						//bt01.style.display = 'block';
+					}
+					else{
+						s1.style.display = 'none';
+						l2.style.display = 'block';
+						//bt01.style.display = 'none';
+					}
+					
+					
+				}
+				
+				function isVazio(obj){
+					if (obj.valeu==""){
+					    modalOk2.show();
+					}
+				}
+		</script>
+		
 	</ui:define>
 </ui:composition>

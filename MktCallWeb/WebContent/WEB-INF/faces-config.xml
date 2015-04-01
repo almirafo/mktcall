@@ -144,6 +144,16 @@
 			<to-view-id>/paginas/controleDialOut.xhtml</to-view-id>
 		</navigation-case>
 		
+		<navigation-case>
+			<from-outcome>blacklist</from-outcome>
+			<to-view-id>/paginas/blacklist.xhtml</to-view-id>
+		</navigation-case>
 		
+		<navigation-case>
+			<from-outcome>uploadblacklist</from-outcome>
+			<to-view-id>/paginas/uploadBlacklist.xhtml</to-view-id>
+		</navigation-case>
+				
+				
 	</navigation-rule>
 </faces-config>

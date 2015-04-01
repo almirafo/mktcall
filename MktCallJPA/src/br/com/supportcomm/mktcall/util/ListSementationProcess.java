@@ -13,6 +13,7 @@ import javax.persistence.PersistenceContext;
 
 import org.hibernate.Session;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
+import org.hibernate.service.jdbc.connections.spi.ConnectionProvider;
 //import org.hibernate.service.jdbc.connections.spi.ConnectionProvider;
 
 import br.com.supportcomm.mktcall.entity.ListSegmentation;
@@ -63,7 +64,7 @@ public class ListSementationProcess {
 		
 	}
 	
-	public  void execute(Scanner scanner,Long idList, String path){/*
+	public  void execute(Scanner scanner,Long idList, String path){
 		 Timestamp intDate = new Timestamp(System.currentTimeMillis());//tempCalendar.getTimeInMillis(); 
 		 List<String> msisdnsErr = new ArrayList<>();
 		try {
@@ -120,7 +121,7 @@ public class ListSementationProcess {
 
 	    System.out.println("Elap time: " + elap);
 
-	*/}
+	}
 	
 	private  boolean isNumeric(String str)
 	{

@@ -47,7 +47,7 @@ img {
 }
 
 #wrapper #header #logo h1 a {
-	background: url(../images/claro.gif) no-repeat 0 0;
+	background: url(../images/logo-vivo-purple.gif) no-repeat 0 0;
 	width: 174px;
 	height: 71px;
 	display: block;
@@ -101,7 +101,7 @@ img {
 #right-box {
 	width: 440px;
 	height: 151px;
-	background: url(../images/home-colorbox-red.jpg) no-repeat 0 0;
+	background: url(../images/home-colorbox-purple.gif) no-repeat 0 0;
 	padding: 20px;
 	float: right;
 }
@@ -246,7 +246,7 @@ img {
 }
 
 #primary-menu ul li.active {
-	background: url(../images/primary-menu-active-red.png) no-repeat
+	background: url(../images/primary-menu-active-purple.gif) no-repeat
 		center bottom;
 }
 
@@ -262,14 +262,14 @@ img {
 }
 
 #primary-menu ul li.active a,#primary-menu ul li a:hover {
-	color: #ed3b17;
+	color: #652d91;
 }
 
 /*Secondary-menu*/
 #secondary-menu {
 	width: 980px;
 	height: 34px;
-	background: url(../images/bg-secondary-menu-red.png) no-repeat 0 0;
+	background: url(../images/bg-secondary-menu-purple.gif) no-repeat 0 0;
 	float: left;
 }
 
@@ -302,7 +302,7 @@ img {
 }
 
 #secondary-menu ul li a:hover {
-	color: #ed3b17;
+	color: #b27adf;
 }
 
 #secondary-menu ul li ul {

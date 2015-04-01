@@ -104,7 +104,7 @@
 						sortBy="#{campanha.name}"
 						filterBy="#{campanha.name}"
 						filterMatchMode="contains">
-						<h:outputText value="#{campanha.name}" title="Qtd. Executada: #{campanha.insertionReach + campanha.insertionReachComplement} de #{campanha.insertionContracted}"/>
+						<h:outputText value="#{campanha.name}"/>
 					</p:column>
 					<p:column
 						headerText="#{rotulo.criadopor}"
@@ -159,10 +159,10 @@
 							<f:converter converterId="StatusConverter" />
 						</h:outputText>
 					</p:column>
-					<p:column
+					<p:column rendered="false"
 						headerText="#{rotulo.prioridade}"
 						styleClass="text-align:center;">
-						<h:outputText value="#{campanha.priority}">
+						<h:outputText rendered="false" value="#{campanha.priority}">
 						</h:outputText>
 					</p:column>
 
@@ -238,7 +238,7 @@
 
 						
 
-						<tr>
+						<tr style="display: none">
 							<td align="left"><h:outputLabel value="#{rotulo.duracao}" /></td>
 							<td align="left">
 							
@@ -295,7 +295,7 @@
 								</h:selectOneListbox></td>
 						</tr>
 
-						<tr>
+						<tr style="display: none">
 							<td align="left"><h:outputLabel
 									for="proximaCampanha"
 									value="#{rotulo.unicavez}" /></td>
@@ -314,20 +314,20 @@
 								</h:selectOneListbox></td>
 						</tr>
 
-						<tr>
+						<tr style="display:none">
 							<td align="left"><h:outputLabel value="#{rotulo.quantidadeContratada}" /></td>
 							<td align="left"><p:inputText
 									id="quantidadeContratada"
 									max="999999999"
 									value="#{campanhaMBean.campanhaSelecionada.insertionContracted}"
-									required="true"
+									required="false"
 									onchange="isNumber(this);"
 									title="#{rotulo.soDigitos}"
-									requiredMessage="#{rotulo.quantidadeContratada}: #{rotulo.campoObrigatorio}" readonly="#{campanhaMBean.campanhaSelecionada.insertionReach >0}" />									
+									requiredMessage="#{rotulo.quantidadeContratada}: #{rotulo.campoObrigatorio}" /> <!-- readonly="#{campanhaMBean.campanhaSelecionada.insertionReach >0}" /> -->									
 									</td>
 						</tr>
 
-						<tr>
+						<tr style="display:none">
 							<td align="left"><h:outputLabel value="#{rotulo.prioridade}" /></td>
 							<td align="left">
 							
@@ -335,7 +335,7 @@
 									id="prioridade"
 									size="1"
 									value="#{campanhaMBean.campanhaSelecionada.priority}"
-									required="true"
+									required="false"
 									requiredMessage="#{rotulo.prioridade}: #{rotulo.campoObrigatorio}">
                                     <f:selectItem itemValue="" itemLabel="#{rotulo.selecione}" />
 									<f:selectItems value="#{campanhaMBean.listaPrioridade}" />
@@ -345,7 +345,7 @@
 						</tr>
 
 
-						<tr>
+						<tr style="display: none">
 							<td align="left"><h:outputLabel
 									for="proximaCampanha"
 									value="#{rotulo.proximaCampanha}" /></td>
@@ -605,7 +605,8 @@
 						 
 				</div>		
 					<br />
-					<p:panelGrid columns="1" border="1"  width="100%" >
+					
+					<p:panelGrid columns="1" border="1"  width="100%" rendered="false">
 						 <f:facet name="header">#{rotulo.region}</f:facet>  
   					
 						<p:pickList id="area"  value="#{campanhaMBean.areaCodes}" var="areaCode" controlsLocation="left" 
@@ -622,6 +623,7 @@
 					  <br />
 
 					 	<!-- MDivulga -->
+					 	<div style="display: none">
  						<h:panelGrid menuTitle="Foward"  width="100%" >
  						 <f:facet name="header">Próxima ação Publicitária</f:facet>  
 							<p:panelGrid columns="2" border="0" styleClass="semBorda" >
@@ -651,6 +653,7 @@
 							</h:panelGrid>
 							<!-- /div-->
 						</h:panelGrid>
+						</div>
 						<!-- -->
 					
 					<h:panelGrid columns="4" border="0" >

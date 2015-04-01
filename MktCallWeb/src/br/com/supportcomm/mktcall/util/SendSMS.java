@@ -4,7 +4,7 @@ import br.com.supportcomm.mktcall.util.HpptUtils;
 
 public class SendSMS {
 	
-	 public  void execute(String number, String mensagem, String proxy, String port) throws Exception{  
+	 public  void execute(String number,String nc, String mensagem, String proxy, String port) throws Exception{  
 		 
 		 HpptUtils httpHpptUtils = new HpptUtils(); 
 		 
@@ -18,7 +18,7 @@ public class SendSMS {
 		 
 		 parameter = parameter.replace("<Mensaje>", mensagem)
 	              .replace("<Movil>", number)
-                  .replace("<Nc>", "3232");   
+                  .replace("<Nc>", nc);   
 		 
 		 httpHpptUtils.sendGet(url,parameter,proxy,port);
 	    }

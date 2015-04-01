@@ -393,6 +393,7 @@ public class CampanhaMBean extends AbstractManagedBean implements Serializable{
 	public String salvarCampanha() throws MktCallException {
 		
 		super.setSucesso(true);
+		this.getCampanhaSelecionada().setPriority(1);
 		if (super.isNullOrBlank(this.getCampanhaSelecionada().getName())) {
 			super.addError(super.getMessage("nomeCampanha") + " " + super.getMessage("campoObrigatorio"));
 			super.setSucesso(false);
@@ -450,6 +451,7 @@ public class CampanhaMBean extends AbstractManagedBean implements Serializable{
 						this.campanhaSelecionada.setListDetail(null);
 					} else {
 					    this.campanhaSelecionada.setListDetail(listDetailService.getListDetailById(getIdListDetail()).get(0));
+					    this.campanhaSelecionada.setProcessStatus("0");
 					}
 
 					this.campanhaSelecionada = campanhaService.mergeCampanha(this.campanhaSelecionada);
@@ -696,7 +698,7 @@ public class CampanhaMBean extends AbstractManagedBean implements Serializable{
 
 		campanhaSelecionada = new Campanha();
 		campanhaTimes = new CampanhaTimes();
-		this.callDuration = 0;
+		this.callDuration = 60;
 
 		String action = (String) event.getComponent().getId();
 		this.idAgencia = 0L;

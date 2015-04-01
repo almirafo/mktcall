@@ -91,8 +91,8 @@ public class FowardBean
 		try {
 			foward = (Foward) em.createQuery("select f from Foward f where f.idCampanha = :idCampanha").setParameter("idCampanha", idCampanha).getSingleResult();
 		} catch (Exception e) {
-			logger.severe(e.getMessage());
-			e.printStackTrace();
+			
+			logger.severe("Foward doesn't exist" + e.getMessage());
 		}finally{
 			return foward==null? new Foward(): foward;
 		}

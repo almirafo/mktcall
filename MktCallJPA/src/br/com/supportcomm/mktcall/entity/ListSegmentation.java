@@ -1,7 +1,10 @@
 package br.com.supportcomm.mktcall.entity;
 
 import java.io.Serializable;
+
+import javax.enterprise.inject.Default;
 import javax.persistence.*;
+import javax.ws.rs.DefaultValue;
 
 import java.sql.Timestamp;
 
@@ -30,6 +33,9 @@ public class ListSegmentation implements Serializable {
 	private String custom1;
 
 	private String custom2;
+	
+	@Column( columnDefinition="default 0")
+	private int block;
 
 	@Column(name="datetime_operation")
 	private Timestamp datetimeOperation;
@@ -68,6 +74,14 @@ public class ListSegmentation implements Serializable {
 
 	public void setDatetimeOperation(Timestamp datetimeOperation) {
 		this.datetimeOperation = datetimeOperation;
+	}
+
+	public int getBlock() {
+		return block;
+	}
+
+	public void setBlock(int block) {
+		this.block = block;
 	}
 
 }

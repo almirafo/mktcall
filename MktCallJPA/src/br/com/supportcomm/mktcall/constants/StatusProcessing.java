@@ -15,8 +15,11 @@ public enum StatusProcessing
     AUTHENTICATION_FAILED_ERROR(256, "Authentication to Asterisk Server failed."),
     NETWORK_PROBLEMS_ERROR(257, "Network connection is disrupted"),
     ACTION_NULL_ERROR(258, "Action is null"),
-    SERVER_ERROR(259, "Not connected to an Asterisk server");
-
+    SERVER_ERROR(259, "Not connected to an Asterisk server"),
+	BLACKLIST_SOURCE_MANUAL(1,"Manual"),
+	BLACKLIST_SOURCE_APP(2,"App"),
+	BLACKLIST_SOURCE_SCRIPT(3,"script");
+	
     private final int value;
     private final String description;
 

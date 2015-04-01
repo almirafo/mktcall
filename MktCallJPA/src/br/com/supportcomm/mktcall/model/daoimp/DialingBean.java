@@ -1,10 +1,12 @@
 package br.com.supportcomm.mktcall.model.daoimp;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -19,6 +21,7 @@ import javax.persistence.criteria.Root;
 
 import org.apache.log4j.Logger;
 
+import br.com.supportcomm.mktcall.config.ConfigBeanLocal;
 import br.com.supportcomm.mktcall.constants.StatusProcessing;
 import br.com.supportcomm.mktcall.entity.Dialing;
 import br.com.supportcomm.mktcall.exception.MktCallException;
@@ -33,6 +36,10 @@ public class DialingBean implements DialingBeanLocal{
     @PersistenceContext(unitName="MktCallJPA")
     private EntityManager em;
 	
+    @EJB
+	ConfigBeanLocal configBean;
+    
+    
 	@Override
 	public Dialing persist(Dialing dedication) throws MktCallException {
 		em.persist(dedication);
@@ -157,14 +164,18 @@ public class DialingBean implements DialingBeanLocal{
         	// Status dialing shows that a new record has been posted and has to be dialed.
             Integer status_dialing = StatusProcessing.NEW_REGISTER.value();
             // Status decidation shows that a dedication is active (vs. inactive) and it can be considered for dialing.
-            String respocndeCode = "2";
-
+            List<String> respocndeCode = new ArrayList<>();
+            respocndeCode.add("2");
+            respocndeCode.add("5");
+            respocndeCode.add("257");
+            
             
             Query query = em.createQuery("select d from Dialing d where d.status = :status and" +
-            		" d.responseCode <> :responseCode and" +
+            		" (d.responseCode not in (:responseCode) or d.responseCode is null) and" +
             		" d.datetimeScheduled <= :now and" +
-            		" d.attempts < 4")
+            		" d.attempts < :maxAtemps")
             		.setParameter("status", status_dialing)
+            		.setParameter("maxAtemps", Integer.valueOf(configBean.getValueByIndentify("maxAtemps")))
             		.setParameter("responseCode", respocndeCode)
             		.setParameter("now", new Timestamp(new java.util.Date().getTime()));
             		

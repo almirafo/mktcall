@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ejb.Local;
 
+import br.com.supportcomm.mktcall.entity.Campanha;
 import br.com.supportcomm.mktcall.entity.ListDetail;
 
 /**
@@ -47,5 +48,7 @@ public interface ListDetailBeanLocal
 	ListDetail findListDeailBySegmentName(String segmentName);
 	
 	ListDetail findListDetailProcessing();
+
+	void blockListOfMsisdnByCampanha(Campanha campanha);
    
 }

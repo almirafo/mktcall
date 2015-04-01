@@ -192,7 +192,7 @@ public class CampanhaBean
      */
     @SuppressWarnings("unchecked")
     public List<Campanha> getCampanhaId(Long idCampanha) {
-        return em.createNamedQuery("Campanha.Id").setParameter("idCampanha", idCampanha).getResultList();
+        return em.createQuery("select c from Campanha c where c.idCampanha = :idcampanha").setParameter("idcampanha", idCampanha).getResultList();
     }
 
     /**
@@ -306,8 +306,8 @@ public class CampanhaBean
 	public Campanha verificaSeTemCampanha(Long idList){
 		Campanha campanhas =  new Campanha();
 		try{
-		 campanhas = (Campanha) em.createQuery("Select c from Campanha c where c.idList= :idList")
-                .setParameter("idList", idList)
+		 campanhas = (Campanha) em.createQuery("select c from Campanha c where c.listDetail.idList= :idList1")
+                .setParameter("idList1", idList)
                 .getResultList().get(0);
 		}catch(Exception e){
 			logger.warning("Ops nao tem campanha");

@@ -70,6 +70,13 @@ public class Dialing implements Serializable
 	@JoinColumn(name="id_list")
 	private ListDetail idList;
     
+	
+	@ManyToOne
+	@JoinColumn(name="id_campanha")
+	private Campanha idCampanha;
+	
+	
+	
     public Dialing()
     {
     }
@@ -172,6 +179,14 @@ public class Dialing implements Serializable
 
 	public void setIdList(ListDetail idList) {
 		this.idList = idList;
+	}
+
+	public Campanha getIdCampanha() {
+		return idCampanha;
+	}
+
+	public void setIdCampanha(Campanha idCampanha) {
+		this.idCampanha = idCampanha;
 	}
 
 	

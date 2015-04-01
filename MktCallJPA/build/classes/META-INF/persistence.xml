@@ -42,6 +42,7 @@
 		<class>br.com.supportcomm.mktcall.vo.ListaDuracaoVO</class>
 		<class>br.com.supportcomm.mktcall.vo.ListaEfetividadeVO</class>
 		<class>br.com.supportcomm.mktcall.vo.ListaEfetividadeConsolidadaVO</class>
+		<class>br.com.supportcomm.mktcall.vo.BlackListVO</class>
 		<class>br.com.supportcomm.mktcall.vo.ListaCampanhaDialOutVO</class>
 		
 		<class>br.com.supportcomm.mktcall.vo.ListaCampanhaVO</class>
@@ -52,6 +53,8 @@
 		<class>br.com.supportcomm.mktcall.entity.ControlFlow</class>
 		<class>br.com.supportcomm.mktcall.entity.Foward</class>
 		<class>br.com.supportcomm.mktcall.entity.Config</class>
+		<class>br.com.supportcomm.mktcall.entity.BlackList</class>
+		<class>br.com.supportcomm.mktcall.entity.UploadBlacklist</class>
 		
 		
 		
@@ -63,7 +66,7 @@
 			<property name="hibernate.connection.url" value="jdbc:postgresql://192.168.3.108:5432/db_MktCall" />
 			<property name="hibernate.connection.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
 			<property name="hibernate.hbm2ddl.auto" value="update" />
-            <property name="hibernate.show_sql" value = "true" />
+            <property name="hibernate.show_sql" value = "false" />
             <property name="current_session_context_class" value="thread"/>
             
 		</properties>

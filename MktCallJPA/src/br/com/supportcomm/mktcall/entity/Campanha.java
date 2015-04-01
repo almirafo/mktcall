@@ -151,7 +151,7 @@ import br.com.supportcomm.mktcall.vo.ListaInteracaoVO;
 	    
 	    
 	    
-	    @NamedNativeQuery(name = "Campanha.listaCampanhaDialOut", query="Select c.name               as campanha  ,"+
+	    /*@NamedNativeQuery(name = "Campanha.listaCampanhaDialOut", query="Select c.name               as campanha  ,"+
 															  " c.id_campanha        as idCampanha, "+   
 															  " insertion_contracted as contratado, "+
 															  " insertion_reach      as completos ,"+
@@ -159,9 +159,22 @@ import br.com.supportcomm.mktcall.vo.ListaInteracaoVO;
 															  " (Case When c.process_status is null Then '0' else c.process_status End)      as processStatus"+
 															  " from  "+
 															  " campanha c "+
-															  " where id_list is not  null",resultSetMapping = "listaCampanhaDialOutVO")
+															  " where id_list is not  null order by c.status desc",resultSetMapping = "listaCampanhaDialOutVO")
+	    */
 	    
-	    
+				                                              
+				                 @NamedNativeQuery(name = "Campanha.listaCampanhaDialOut", query="  Select c.name               as campanha  , " +
+				                                          "    c.id_campanha        as idCampanha, " +    
+				                                          "    insertion_contracted as contratado, " +
+				                                          "    (select count(s.*) from statistic s where s.listen_complete = true and s.id_campanha = c.id_campanha)  as completos , " +
+				                                          "    (select count(s.*) from statistic s where s.listen_complete = false and s.id_campanha = c.id_campanha) as incompletos, " +
+				                                          "    (Case When c.process_status is null Then '0'  " +
+				                                          "          When (select sum(case when response_code in('2','5' ) then 1 else 0 end) " + 
+				                                          "               from dialing where id_list in (select c.id_list from campanha c inner join list_segmentation ls on (c.id_list = ls.id_list) and c.id_campanha = " + 
+				                                          "               dialing.id_campanha) and   id_campanha= c.id_campanha)  = (Select count(*) from list_segmentation ls inner join campanha c2 on (ls.id_list=c2.id_list) and  c2.id_campanha = c.id_campanha)          then  '1' " +
+				                                          "          else c.process_status End)      as processStatus " +
+				                                        " from  campanha c " +
+				                                        " where id_list is not  null and status=1 order by c.status desc " ,resultSetMapping = "listaCampanhaDialOutVO")
 	    
 
 })

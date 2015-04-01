@@ -14,6 +14,7 @@ import javax.persistence.*;
   })
 
 @Entity
+@Cacheable(value=true)
 public class Config implements Serializable {
 	private static final long serialVersionUID = 1L;
 

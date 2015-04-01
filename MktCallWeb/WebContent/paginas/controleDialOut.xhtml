@@ -59,6 +59,12 @@
 							outcome="controleDialOut" rendered="#{loginMBean.isAdmin}"
 							value="#{rotulo.controleDialOutLink}">
 					</h:link></li>
+
+					<li><h:link
+							outcome="blacklist" rendered="#{loginMBean.isAdmin}"
+							value="#{rotulo.blacklistLink}">
+					</h:link></li>
+
 				</ul>
 			</div>
 			<br/>
@@ -95,15 +101,9 @@
 					</p:column>
 					
 					<p:column
-						headerText="#{rotulo.controleDialOutContratado}"
-						styleClass="text-align:center;">
-						<h:outputText value="#{campanha.contratado}" />
-					</p:column>
-					
-					<p:column
 						headerText="#{rotulo.controleDialOutCompletos}"
 						styleClass="text-align:center;">
-						<h:outputText value="#{campanhacompletos}" />
+						<h:outputText value="#{campanha.completos}" />
 					</p:column>
 					
 					<p:column

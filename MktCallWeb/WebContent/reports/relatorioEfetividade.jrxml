@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Teste" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4a94ff6a-c5c9-4800-8cd6-318430aa0aa1">
 	<property name="ireport.zoom" value="3.0"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="248"/>
+	<property name="ireport.x" value="11"/>
+	<property name="ireport.y" value="115"/>
 	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -32,7 +32,7 @@
 			<staticText>
 				<reportElement uuid="26429e50-0870-4bf2-9731-852163dd826e" style="Title" x="0" y="13" width="287" height="33" forecolor="#990099"/>
 				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Chamada Patrocinada]]></text>
+				<text><![CDATA[Discador Patrocinado]]></text>
 			</staticText>
 			<image>
 				<reportElement uuid="9b8b6fac-30c0-4603-8344-07232030b184" isPrintRepeatedValues="false" x="365" y="0" width="190" height="70"/>
@@ -96,13 +96,6 @@
 				<textFieldExpression><![CDATA["Exibições"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="660fb396-eeeb-4523-bb95-cd1f09591dc8" style="Title" x="255" y="36" width="77" height="14"/>
-				<textElement textAlignment="Center">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Usuários Únicos"]]></textFieldExpression>
-			</textField>
-			<textField>
 				<reportElement uuid="d6365db2-8c83-45cd-a8d9-728b8f424c25" style="Title" x="332" y="36" width="71" height="14"/>
 				<textElement textAlignment="Center">
 					<font size="8" isBold="true"/>
@@ -160,13 +153,6 @@
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totalExibicoes}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="3af628a8-dbd1-4abc-8560-2b5e7550650b" x="255" y="1" width="77" height="20"/>
-				<textElement textAlignment="Center">
-					<font size="7"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{unicos}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement uuid="fc27daaa-a2fb-4ce0-8cf0-930aa9d73df0" x="332" y="1" width="71" height="20"/>

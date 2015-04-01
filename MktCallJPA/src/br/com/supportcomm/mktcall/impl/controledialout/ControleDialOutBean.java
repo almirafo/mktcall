@@ -64,8 +64,8 @@ public class ControleDialOutBean
 
 	@Override
 	public void insertListOfMsisdnByCampanha(Campanha campanha) {
-		String sqlString = "insert into dialing " + 
-	   "(msisdn_dialing,attempts,datetime_inserted,datetime_last_operation,datetime_schedule,response_code,response_message,status,action,id_list) " + 
+/*		String sqlString = "insert into dialing " + 
+	   "(msisdn_dialing,attempts,datetime_inserted,datetime_last_operation,datetime_schedule,response_code,response_message,status,action,id_list,id_campanha) " + 
 	   "select ls.msisdn , "+
        "0 attempts, "+
        "now() datetime_inserted, "+
@@ -75,11 +75,35 @@ public class ControleDialOutBean
        "'' response_message, "+
        "0 status, "+
        "'DIAL' , "+
-       " ls.id_list " +
-	   "			from list_segmentation ls  "+
+       " ls.id_list , " +
+       " c.id_campanha " +
+       "			from list_segmentation ls  "+
        "       inner join list_detail ld on (ls.id_list = ld.id_list) "+
        "       inner join campanha c on(ld.id_list = c.id_list)" +
        " where c.id_campanha = :idcampanha and c.process_status= :processStatus ";
+*/		
+		
+		String sqlString = "insert into dialing " + 
+				   "(msisdn_dialing,attempts,datetime_inserted,datetime_last_operation,datetime_schedule,response_code,response_message,status,action,id_list,id_campanha) " + 
+				   "select ls.msisdn , "+
+			       "0 attempts, "+
+			       "now() datetime_inserted, "+
+			       "now() datetime_last_operation, "+
+			       "now() datetime_schedule, "+
+			       "'' response_code, "+
+			       "'' response_message, "+
+			       " 0 status, "+
+			       " 'DIAL'  , "+
+			       " ls.id_list , " +
+			       " c.id_campanha " +
+			       "			from list_segmentation ls  "+
+			       "       inner join list_detail ld on (ls.id_list = ld.id_list) "+
+			       "       inner join campanha c on(ld.id_list = c.id_list)" +
+			       " where c.id_campanha = :idcampanha and c.process_status= :processStatus  and not exists (select * from blacklist where msisdn = ls.msisdn) ";
+		
+		
+		
+		
 		
 		em.createNativeQuery(sqlString)
 		   .setParameter("idcampanha", campanha.getIdCampanha())

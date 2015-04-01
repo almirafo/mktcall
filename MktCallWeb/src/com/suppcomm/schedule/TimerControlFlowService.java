@@ -45,7 +45,7 @@ public class TimerControlFlowService extends AbstractManagedBean{
 	}
 	
 
-    @Schedule( second="0" ,minute="0/2",hour="*", persistent=false)
+    //@Schedule( second="0" ,minute="0/2",hour="*", persistent=false)
     public void doWork(){
 
     	LogMktCall.log(Level.INFO,"iniciando coltrol flow");
